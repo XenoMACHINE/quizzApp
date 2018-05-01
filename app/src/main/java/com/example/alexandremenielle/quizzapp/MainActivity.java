@@ -1,5 +1,6 @@
 package com.example.alexandremenielle.quizzapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.example.alexandremenielle.quizzapp.Model.Theme;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = "MainActivity";
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private ArrayList<Theme> allThemes;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+        mAuth = FirebaseAuth.getInstance();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         database.getReference("themes").addValueEventListener(new ValueEventListener() {
@@ -52,5 +57,16 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, databaseError.toString());
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //check connection
+        if(mAuth.getCurrentUser() == null){
+            Intent intent = new Intent(this, ConnexionActivity.class);
+            startActivity(intent);
+        }
     }
 }
