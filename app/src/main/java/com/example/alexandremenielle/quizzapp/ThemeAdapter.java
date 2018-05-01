@@ -1,6 +1,7 @@
 package com.example.alexandremenielle.quizzapp;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import butterknife.ButterKnife;
 public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder>{
 
     private ArrayList<Theme> themes;
+    private ItemClickListener clickListener;
 
     public ThemeAdapter(ArrayList<Theme> themes) {
         this.themes = themes;
@@ -32,9 +34,15 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         Theme theme = themes.get(position);
         holder.name.setText(theme.getName());
+        holder.name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (clickListener != null) clickListener.onClick(view, position);
+            }
+        });
     }
 
     @Override
@@ -42,7 +50,11 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder>{
         return themes == null ? 0 : themes.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.clickListener = itemClickListener;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.name) TextView name;
 
         public ViewHolder(View itemView) {
