@@ -9,8 +9,31 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycleView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager">
 
     </android.support.v7.widget.RecyclerView>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/playersPopup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/lightGray"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="35dp"
+        android:visibility="visible">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/playerRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
+
+    </android.support.constraint.ConstraintLayout>
+
 
 </android.support.constraint.ConstraintLayout>
