@@ -3,12 +3,14 @@ package com.example.alexandremenielle.quizzapp;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.example.alexandremenielle.quizzapp.Model.Theme;
 import com.example.alexandremenielle.quizzapp.Model.User;
@@ -26,16 +28,18 @@ import java.util.Comparator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ItemClickListener{
 
     @BindView(R.id.recycleView) RecyclerView recyclerView;
     @BindView(R.id.playerRV) RecyclerView playersRecyclerView;
+    @BindView(R.id.playersPopup) ConstraintLayout playersPopup;
 
     private final String TAG = "MainActivity";
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private ArrayList<Theme> allThemes;
     private ArrayList<User> allUsers;
     private FirebaseAuth mAuth;
+    private ItemClickListener itemClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
         playersRecyclerView.setLayoutManager(mLayoutManager);
 
+        itemClickListener = this;
+
+        //Get all themes
         database.getReference("themes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -60,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 allThemes = themes;
                 ThemeAdapter themeAdapter = new ThemeAdapter(allThemes);
                 recyclerView.setAdapter(themeAdapter);
+                themeAdapter.setClickListener(itemClickListener);
             }
 
             @Override
@@ -68,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        //Get all users and sort by online status
         database.getReference("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -86,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, databaseError.toString());
             }
         });
+
     }
 
     @Override
@@ -116,5 +127,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return sortedUsers;
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        playersPopup.setVisibility(View.VISIBLE);
     }
 }

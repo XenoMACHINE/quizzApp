@@ -47,7 +47,7 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
         return users == null ? 0 : users.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.playerCellName) TextView playerCellName;
 
         public ViewHolder(View itemView) {
