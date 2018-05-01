@@ -64,9 +64,8 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         //check connection
-        if(mAuth.getCurrentUser() == null){
-            Intent intent = new Intent(this, ConnexionActivity.class);
-            startActivity(intent);
-        }
+        Intent intent = new Intent(this, ConnexionActivity.class);
+        startActivity(intent);
+        FirebaseUser currentUser = mAuth.getCurrentUser();
     }
 }
