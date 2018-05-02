@@ -40,6 +40,10 @@ public class ConnexionActivity extends AppCompatActivity {
         String email = loginEt.getText().toString();
         String password = passwordEt.getText().toString();
 
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(getApplicationContext(),"Il manque un ou plusieurs champs. Veuillez réessayer.",Toast.LENGTH_SHORT).show();
+            return;
+        }
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
