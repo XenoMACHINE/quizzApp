@@ -6,6 +6,7 @@ package com.example.alexandremenielle.quizzapp.Model;
 
 public class User {
 
+    private String id;
     private String firstname;
     private String lastname;
     private Boolean isOnline;
@@ -35,5 +36,14 @@ public class User {
 
     public void setIsOnline(Boolean online) {
         isOnline = online;
+    }
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
