@@ -1,9 +1,12 @@
 package com.example.alexandremenielle.quizzapp;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -24,6 +27,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     @BindView(R.id.playersPopup) ConstraintLayout playersPopup;
 
     private final String TAG = "MainActivity";
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private ArrayList<Theme> allThemes;
     private ArrayList<User> allUsers;
     private FirebaseAuth mAuth;
@@ -56,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         itemClickListener = this;
 
         //Get all themes
-        database.getReference("themes").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("themes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Theme> themes = new ArrayList<>();
@@ -78,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
 
         //Get all users and sort by online status
-        database.getReference("users").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<User> users = new ArrayList<>();
@@ -89,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 allUsers = sortUsersByOnline(users);
                 PlayersAdapter playersAdapter = new PlayersAdapter(allUsers);
                 playersRecyclerView.setAdapter(playersAdapter);
+                playersAdapter.setClickListener(itemClickListener);
             }
 
             @Override
@@ -104,11 +110,11 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         super.onStart();
 
         //check connection
-        if(mAuth.getCurrentUser() == null){
+        /*if(mAuth.getCurrentUser() == null){
             Intent intent = new Intent(this, ConnexionActivity.class);
             startActivity(intent);
-        }
-        mAuth.getInstance().signOut();
+        }*/
+        //mAuth.getInstance().signOut();
     }
 
     private ArrayList<User> sortUsersByOnline(ArrayList<User> users){
@@ -131,7 +137,35 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     }
 
     @Override
-    public void onClick(View view, int position) {
+    public void onClick(View view, User user) {
+        playersPopup.setVisibility(View.INVISIBLE);
+        AlertDialog.Builder builder;
+        final Context context = this;
+        builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        builder.setTitle("Défi envoyé !")
+                .setMessage("En attente de l'adversaire...")
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                //.setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    @Override
+    public void onClick(View view, Theme theme) {
+        if (playersPopup.getVisibility() == View.VISIBLE){
+            playersPopup.setVisibility(View.INVISIBLE);
+            return;
+        }
         playersPopup.setVisibility(View.VISIBLE);
+    }
+
+    public void sendDuel(){
+
+        Map<String, Object> childUpdates = new HashMap<>();
+
+        mDatabase.updateChildren(childUpdates);
     }
 }

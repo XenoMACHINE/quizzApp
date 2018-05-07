@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 
 public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHolder> {
     private ArrayList<User> users;
+    private ItemClickListener clickListener;
 
     public PlayersAdapter(ArrayList<User> users) {
         this.users = users;
@@ -32,19 +33,29 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(PlayersAdapter.ViewHolder holder, int position) {
-        User user = users.get(position);
+    public void onBindViewHolder(PlayersAdapter.ViewHolder holder, final int position) {
+        final User user = users.get(position);
         holder.playerCellName.setText(user.getFirstname());
         if (user.getIsOnline()) {
             holder.playerCellName.setTextColor(Color.GREEN);
         }else{
             holder.playerCellName.setTextColor(Color.RED);
         }
+        holder.playerCellName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (clickListener != null) clickListener.onClick(view, user);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return users == null ? 0 : users.size();
+    }
+
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.clickListener = itemClickListener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

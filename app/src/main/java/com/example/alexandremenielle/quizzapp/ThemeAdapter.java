@@ -35,12 +35,12 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        Theme theme = themes.get(position);
+        final Theme theme = themes.get(position);
         holder.name.setText(theme.getName());
         holder.name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (clickListener != null) clickListener.onClick(view, position);
+                if (clickListener != null) clickListener.onClick(view, theme);
             }
         });
     }
