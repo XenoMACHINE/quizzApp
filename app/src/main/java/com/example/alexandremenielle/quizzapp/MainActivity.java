@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         switch (item.getItemId()) {
 
             case R.id.settings:
-                Intent intentSettings = new Intent(this, MainActivity.class);
+                Intent intentSettings = new Intent(this, SettingsActivity.class);
                 /*EditText editText = (EditText) findViewById(R.id.editText);
                 String message = editText.getText().toString();
                 intent.putExtra(EXTRA_MESSAGE, message);*/
