@@ -3,22 +3,21 @@ package com.example.alexandremenielle.quizzapp;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.alexandremenielle.quizzapp.Model.Theme;
 import com.example.alexandremenielle.quizzapp.Model.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -212,5 +210,36 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         pushData.put(mDatabase.push().getKey(), childUpdates);
 
         mDatabase.child("duels").updateChildren(pushData);
+    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.settings:
+                Intent intentSettings = new Intent(this, MainActivity.class);
+                /*EditText editText = (EditText) findViewById(R.id.editText);
+                String message = editText.getText().toString();
+                intent.putExtra(EXTRA_MESSAGE, message);*/
+                startActivity(intentSettings);
+                finish();
+                return true;
+
+            case R.id.disconnect:
+                Intent intentConnexion = new Intent(this, ConnexionActivity.class);
+                /*EditText editText = (EditText) findViewById(R.id.editText);
+                String message = editText.getText().toString();
+                intent.putExtra(EXTRA_MESSAGE, message);*/
+                FirebaseAuth.getInstance().signOut();
+                startActivity(intentConnexion);
+                finish();
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+
     }
 }
