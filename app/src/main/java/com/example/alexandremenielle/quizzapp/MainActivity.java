@@ -110,7 +110,9 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 for (DataSnapshot userSnap : dataSnapshot.getChildren()){
                     User user = userSnap.getValue(User.class);
                     user.setId(userSnap.getKey());
-                    users.add(user);
+                    if (!user.getId().equals(AppManager.getInstance().currentUser.getId())){
+                        users.add(user);
+                    }
                 }
                 allUsers = sortUsersByOnline(users);
                 PlayersAdapter playersAdapter = new PlayersAdapter(allUsers);
