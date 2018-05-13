@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         ButterKnife.bind(this);
 
         //Set userdefault for emulator which FirebaseAuth dont work
-        mDatabase.child("users").child("3b0r0KJAktWoANT1s07l9iE7GM03").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("users").child("B0O3cs57qqXdywqkQQR6si98ws03").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -155,7 +155,8 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     @Override
     public void onClick(View view, User user) {
-        sendDuel(user);
+        DuelManager.getInstance().mContext = this;
+        DuelManager.getInstance().sendDuelTo(user, selectedTheme);
         playersPopup.setVisibility(View.INVISIBLE);
         AlertDialog.Builder builder;
         final Context context = this;
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 .setMessage("En attente de l'adversaire...")
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
+                        DuelManager.getInstance().cancelSentDuel();
                     }
                 })
                 //.setIcon(android.R.drawable.ic_dialog_alert)
@@ -181,40 +182,11 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         playersPopup.setVisibility(View.VISIBLE);
     }
 
-    public void sendDuel(User selectedUser){
-        User currentUser = AppManager.getInstance().currentUser;
-
-        Map<String, Object> childUpdates = new HashMap<>();
-        Map<String, Object> players = new HashMap<>();
-
-        Map<String, Object> currentUserHm = new HashMap<>();
-        currentUserHm.put("isReady", true);
-        currentUserHm.put("score", 0);
-        currentUserHm.put("id", currentUser.getId());
-        currentUserHm.put("questionNumber", 0);
-
-        Map<String, Object> selectedUserHm = new HashMap<>();
-        selectedUserHm.put("isReady", false);
-        selectedUserHm.put("score", 0);
-        selectedUserHm.put("id", currentUser.getId());
-        selectedUserHm.put("questionNumber", 0);
-
-        players.put(currentUser.getId(), currentUserHm);
-        players.put(selectedUser.getId(),selectedUserHm);
-
-        childUpdates.put("status","0");
-        childUpdates.put("theme", selectedTheme.getId());
-        childUpdates.put("players", players);
-
-        Map<String, Object> pushData = new HashMap<>();
-        pushData.put(mDatabase.push().getKey(), childUpdates);
-
-        mDatabase.child("duels").updateChildren(pushData);
-    }
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
+
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
