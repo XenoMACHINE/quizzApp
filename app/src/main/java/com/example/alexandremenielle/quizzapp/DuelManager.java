@@ -2,6 +2,9 @@ package com.example.alexandremenielle.quizzapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.UserManager;
+import android.support.constraint.solver.widgets.Snapshot;
+import android.widget.Toast;
 
 import com.example.alexandremenielle.quizzapp.Model.Duel;
 import com.example.alexandremenielle.quizzapp.Model.Theme;
@@ -33,6 +36,8 @@ public class DuelManager {
 
         return  sharedInstance;
     }
+
+    public DuelEventListener duelEventListener;
 
     public Context mContext;
 
@@ -104,4 +109,76 @@ public class DuelManager {
             }
         });
     }
+
+    public void waitDuelListener(){
+        String currentUserId = AppManager.getInstance().currentUser.getId();
+        mDatabase.child("users").child(currentUserId).child("duels").limitToLast(1).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String,Boolean> duelHm = (HashMap<String,Boolean>) dataSnapshot.getValue();
+
+                for (Map.Entry<String, Boolean> duel : duelHm.entrySet()) {
+                    if(duel.getValue() == false){
+                        manageDuelListener(duel.getKey());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void manageDuelListener(String duelId){
+        final String currentUserId = AppManager.getInstance().currentUser.getId();
+        mDatabase.child("duels").child(duelId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Duel duel = dataSnapshot.getValue(Duel.class);
+                currentIdDuel = duel.getId();
+
+                //Duel pas encore commencé
+                if(duel.getStatus().equals("0")){
+                    notifyDuelReceived(duel);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void notifyDuelReceived(final Duel duel){
+        String currentUserId = AppManager.getInstance().currentUser.getId();
+        for (Map.Entry<String, Object> player : duel.getPlayers().entrySet())
+        {
+            if (!player.getKey().equals(currentUserId)){
+                mDatabase.child("users").child(player.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+                        duelEventListener.onReceiveDuel(user);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }
+    }
+
+    public void acceptDuel(){
+
+    }
+
+    public void rejectDuel(){
+
+    }
+
 }

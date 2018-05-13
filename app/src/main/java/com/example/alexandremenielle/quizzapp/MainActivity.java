@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.alexandremenielle.quizzapp.Model.Duel;
 import com.example.alexandremenielle.quizzapp.Model.Theme;
 import com.example.alexandremenielle.quizzapp.Model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,7 +32,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements ItemClickListener{
+public class MainActivity extends AppCompatActivity implements ItemClickListener, DuelEventListener{
 
     @BindView(R.id.recycleView) RecyclerView recyclerView;
     @BindView(R.id.playerRV) RecyclerView playersRecyclerView;
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
         ButterKnife.bind(this);
 
+        DuelManager.getInstance().duelEventListener = this;
+
         //Set userdefault for emulator which FirebaseAuth dont work
         mDatabase.child("users").child("B0O3cs57qqXdywqkQQR6si98ws03").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 User user = dataSnapshot.getValue(User.class);
                 user.setId(dataSnapshot.getKey());
                 AppManager.getInstance().currentUser = user;
+                DuelManager.getInstance().waitDuelListener(); //TODO Changer l'endroit de l'appel
             }
 
             @Override
@@ -213,5 +217,25 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    @Override
+    public void onReceiveDuel(User user) {
+        AlertDialog.Builder builder;
+        final Context context = this;
+        builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        builder.setTitle(user.getFullName() + " vous défie !")
+                .setPositiveButton("Accepter", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        DuelManager.getInstance().acceptDuel();
+                    }
+                })
+                .setNegativeButton("Refuser", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        DuelManager.getInstance().rejectDuel();
+                    }
+                })
+                .show();
     }
 }

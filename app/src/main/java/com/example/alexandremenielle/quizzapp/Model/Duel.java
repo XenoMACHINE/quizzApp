@@ -12,6 +12,16 @@ public class Duel {
     private Boolean closed;
     private String id;
     private String theme;
+    private String status;
+
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
     private HashMap<String, Object> players;
 
     public String getId() {

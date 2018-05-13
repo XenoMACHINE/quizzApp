@@ -22,6 +22,10 @@ public class User {
         return lastname;
     }
 
+    public String getFullName() {
+        return firstname + " " + lastname;
+    }
+
     public Boolean getIsOnline() {
         return isOnline;
     }
