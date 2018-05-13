@@ -97,8 +97,8 @@ public class DuelManager {
                 Duel duel = dataSnapshot.getValue(Duel.class);
                 HashMap<String,Object> playerHm = (HashMap<String,Object>) duel.getPlayers().get(selectedUserId);
                 if (playerHm != null && (Boolean) playerHm.get("isReady") == true){
-                    Intent intentConnexion = new Intent(mContext, DuelActivity.class);
-                    mContext.startActivity(intentConnexion);
+                    Intent intent = new Intent(mContext, DuelActivity.class);
+                    mContext.startActivity(intent);
                     ref.removeEventListener(this);
                 }
             }
@@ -132,12 +132,11 @@ public class DuelManager {
     }
 
     public void manageDuelListener(String duelId){
-        final String currentUserId = AppManager.getInstance().currentUser.getId();
         mDatabase.child("duels").child(duelId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Duel duel = dataSnapshot.getValue(Duel.class);
-                currentIdDuel = duel.getId();
+                currentIdDuel = dataSnapshot.getKey();
 
                 //Duel pas encore commencé
                 if(duel.getStatus().equals("0")){
@@ -174,11 +173,29 @@ public class DuelManager {
     }
 
     public void acceptDuel(){
+        String currentUserId = AppManager.getInstance().currentUser.getId();
+        HashMap<String, Object> pushData = new HashMap<>();
+        pushData.put(currentIdDuel, true);
+        mDatabase.child("users").child(currentUserId).child("duels").updateChildren(pushData);
 
+        pushData.clear();
+        pushData.put("isReady",true);
+        mDatabase.child("duels").child(currentIdDuel).child("players").child(currentUserId).updateChildren(pushData);
+
+        pushData.clear();
+        pushData.put("status","1");
+        mDatabase.child("duels").child(currentIdDuel).updateChildren(pushData);
     }
 
     public void rejectDuel(){
+        String currentUserId = AppManager.getInstance().currentUser.getId();
+        HashMap<String, Object> pushData = new HashMap<>();
+        pushData.put(currentIdDuel, true);
+        mDatabase.child("users").child(currentUserId).child("duels").updateChildren(pushData);
 
+        pushData.clear();
+        pushData.put("status","4");
+        mDatabase.child("duels").child(currentIdDuel).updateChildren(pushData);
     }
 
 }

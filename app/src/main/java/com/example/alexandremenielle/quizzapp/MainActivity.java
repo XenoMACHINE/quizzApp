@@ -229,6 +229,8 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         DuelManager.getInstance().acceptDuel();
+                        Intent intent = new Intent(context, DuelActivity.class);
+                        startActivity(intent);
                     }
                 })
                 .setNegativeButton("Refuser", new DialogInterface.OnClickListener() {

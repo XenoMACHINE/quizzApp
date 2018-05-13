@@ -7,8 +7,10 @@
     tools:context="com.example.alexandremenielle.quizzapp.DuelActivity">
 
     <TextView
+        android:id="@+id/questionLabel"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="coucou"/>
+        android:layout_height="wrap_content"
+        android:text="Question : "
+        android:gravity="center"/>
 
 </android.support.constraint.ConstraintLayout>
