@@ -27,8 +27,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,8 +57,21 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
         DuelManager.getInstance().duelEventListener = this;
 
+        mAuth = FirebaseAuth.getInstance();
+
+        if(mAuth.getCurrentUser() == null){
+            Intent intent = new Intent(this, ConnexionActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         //Set userdefault for emulator which FirebaseAuth dont work
-        mDatabase.child("users").child("B0O3cs57qqXdywqkQQR6si98ws03").addListenerForSingleValueEvent(new ValueEventListener() {
+        String userId = mAuth.getCurrentUser().getUid();
+        if(userId == null){
+            userId = "B0O3cs57qqXdywqkQQR6si98ws03";
+        }
+        mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -75,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             }
         });
 
-        mAuth = FirebaseAuth.getInstance();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
@@ -129,18 +139,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             }
         });
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        //check connection
-        /*if(mAuth.getCurrentUser() == null){
-            Intent intent = new Intent(this, ConnexionActivity.class);
-            startActivity(intent);
-        }*/
-        //mAuth.getInstance().signOut();
     }
 
     private ArrayList<User> sortUsersByOnline(ArrayList<User> users){
@@ -204,7 +202,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 String message = editText.getText().toString();
                 intent.putExtra(EXTRA_MESSAGE, message);*/
                 startActivity(intentSettings);
-                finish();
                 return true;
 
             case R.id.disconnect:

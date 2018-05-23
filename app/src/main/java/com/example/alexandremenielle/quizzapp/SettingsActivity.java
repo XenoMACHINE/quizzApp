@@ -12,11 +12,8 @@ import com.example.alexandremenielle.quizzapp.Model.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +29,7 @@ public class SettingsActivity extends AppCompatActivity {
     @BindView(R.id.firstname) EditText firstName;
     @BindView(R.id.lastname) EditText lastName;
     @BindView(R.id.email) EditText email;
-    User user;
+    User user = AppManager.getInstance().currentUser;
 
 
     @Override
@@ -40,23 +37,9 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
-        //Set userdefault for emulator which FirebaseAuth dont work
-        mDatabase.child("users").child("B0O3cs57qqXdywqkQQR6si98ws03").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
-                user.setId(dataSnapshot.getKey());
-                lastName.setText(user.getLastname());
-                firstName.setText(user.getFirstname());
-                email.setText(user.getMail());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        mAuth = FirebaseAuth.getInstance();
+        lastName.setText(user.getLastname());
+        firstName.setText(user.getFirstname());
+        email.setText(user.getMail());
 
     }
 
@@ -80,8 +63,6 @@ public class SettingsActivity extends AppCompatActivity {
                 // ...
             }
         });
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
         finish();
     }
 
