@@ -153,9 +153,11 @@ public class DuelManager {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String,Boolean> duelHm = (HashMap<String,Boolean>) dataSnapshot.getValue();
 
-                for (Map.Entry<String, Boolean> duel : duelHm.entrySet()) {
-                    if(duel.getValue() == false){
-                        manageDuelListener(duel.getKey());
+                if(duelHm != null){
+                    for (Map.Entry<String, Boolean> duel : duelHm.entrySet()) {
+                        if(duel.getValue() == false){
+                            manageDuelListener(duel.getKey());
+                        }
                     }
                 }
             }
