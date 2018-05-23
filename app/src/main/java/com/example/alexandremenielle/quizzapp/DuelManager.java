@@ -85,7 +85,10 @@ public class DuelManager {
     }
 
     public void cancelSentDuel(){
-        //TODO
+        HashMap<String, Object> pushData = new HashMap<>();
+        pushData.put("status", "4");
+        pushData.put("closed", true);
+        mDatabase.child("duels").child(currentIdDuel).updateChildren(pushData);
     }
 
     public void launchDuelListener(final String selectedUserId){
@@ -110,6 +113,39 @@ public class DuelManager {
         });
     }
 
+    public void manageDuelListener(String duelId){
+        final DatabaseReference ref = mDatabase.child("duels").child(duelId);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Duel duel = dataSnapshot.getValue(Duel.class);
+                currentIdDuel = dataSnapshot.getKey();
+
+                //Duel pas encore commencé
+                if(duel.getStatus().equals("0")){
+                    notifyDuelReceived(duel);
+                }
+
+                //Gestion des fins de parties
+                if(duel.getStatus().equals("4")){
+                    duelEventListener.onReceiveEndDuel(duel);
+                    HashMap<String, Object> pushData = new HashMap<>();
+                    pushData.put("closed", true);
+                    mDatabase.child("duels").child(currentIdDuel).updateChildren(pushData);
+
+                    //Peut coupé le listener sur ce duel
+                    ref.removeEventListener(this);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
     public void waitDuelListener(){
         String currentUserId = AppManager.getInstance().currentUser.getId();
         mDatabase.child("users").child(currentUserId).child("duels").limitToLast(1).addValueEventListener(new ValueEventListener() {
@@ -121,26 +157,6 @@ public class DuelManager {
                     if(duel.getValue() == false){
                         manageDuelListener(duel.getKey());
                     }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public void manageDuelListener(String duelId){
-        mDatabase.child("duels").child(duelId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Duel duel = dataSnapshot.getValue(Duel.class);
-                currentIdDuel = dataSnapshot.getKey();
-
-                //Duel pas encore commencé
-                if(duel.getStatus().equals("0")){
-                    notifyDuelReceived(duel);
                 }
             }
 

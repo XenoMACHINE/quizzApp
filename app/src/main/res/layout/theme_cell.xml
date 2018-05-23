@@ -8,9 +8,9 @@
     <TextView
         android:id="@+id/name"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:text="Musique"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:gravity="center"
         />
 
@@ -19,7 +19,9 @@
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:background="#000"
-        android:alpha="0.5"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:alpha="0.1"
         app:layout_constraintTop_toBottomOf="@id/name">
 
     </View>

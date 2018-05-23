@@ -1,5 +1,6 @@
 package com.example.alexandremenielle.quizzapp;
 
+import com.example.alexandremenielle.quizzapp.Model.Duel;
 import com.example.alexandremenielle.quizzapp.Model.User;
 
 /**
@@ -9,4 +10,5 @@ import com.example.alexandremenielle.quizzapp.Model.User;
 public interface DuelEventListener {
 
     void onReceiveDuel(User user);
+    void onReceiveEndDuel(Duel duel);
 }

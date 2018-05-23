@@ -41,6 +41,7 @@ dependencies {
     implementation "com.jakewharton:butterknife:$project.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$project.butterKnifeVersion"
 
+
     implementation "com.android.support:recyclerview-v7:$project.appCompatVersion"
 }
 

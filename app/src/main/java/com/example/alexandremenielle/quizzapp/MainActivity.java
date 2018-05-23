@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.alexandremenielle.quizzapp.Model.Duel;
 import com.example.alexandremenielle.quizzapp.Model.Theme;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     private ArrayList<User> allUsers;
     private FirebaseAuth mAuth;
     private ItemClickListener itemClickListener;
+    private AlertDialog.Builder builder;
+    private AlertDialog alert;
 
     private Theme selectedTheme;
 
@@ -164,18 +167,16 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         DuelManager.getInstance().mContext = this;
         DuelManager.getInstance().sendDuelTo(user, selectedTheme);
         playersPopup.setVisibility(View.INVISIBLE);
-        AlertDialog.Builder builder;
-        final Context context = this;
         builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-        builder.setTitle("Défi envoyé !")
+        alert = builder.setTitle("Défi envoyé !")
                 .setMessage("En attente de l'adversaire...")
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         DuelManager.getInstance().cancelSentDuel();
                     }
                 })
-                //.setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+                .create();
+        alert.show();
     }
 
     @Override
@@ -223,10 +224,9 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     @Override
     public void onReceiveDuel(User user) {
-        AlertDialog.Builder builder;
         final Context context = this;
         builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-        builder.setTitle(user.getFullName() + " vous défie !")
+        alert = builder.setTitle(user.getFullName() + " vous défie !")
                 .setPositiveButton("Accepter", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -240,6 +240,13 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                         DuelManager.getInstance().rejectDuel();
                     }
                 })
-                .show();
+                .create();
+        alert.show();
+    }
+
+    @Override
+    public void onReceiveEndDuel(Duel duel) {
+        alert.cancel();
+        Toast.makeText(getApplicationContext(),"Défi annulé.",Toast.LENGTH_SHORT).show();
     }
 }
