@@ -59,6 +59,10 @@ public class User {
     public void setMail(String mail) {this.mail = mail;}
 
     public Map<String,Object> toMap(){
-        return new HashMap<>();
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("firstname",firstname);
+        map.put("lastname",lastname);
+        map.put("mail",mail);
+        return map;
     }
 }
