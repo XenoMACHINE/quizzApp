@@ -2,9 +2,6 @@ package com.example.alexandremenielle.quizzapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.UserManager;
-import android.support.constraint.solver.widgets.Snapshot;
-import android.widget.Toast;
 
 import com.example.alexandremenielle.quizzapp.Model.Duel;
 import com.example.alexandremenielle.quizzapp.Model.Theme;
@@ -116,12 +113,14 @@ public class DuelManager {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String,Boolean> duelHm = (HashMap<String,Boolean>) dataSnapshot.getValue();
-
-                for (Map.Entry<String, Boolean> duel : duelHm.entrySet()) {
-                    if(duel.getValue() == false){
-                        manageDuelListener(duel.getKey());
+                if(duelHm != null){
+                    for (Map.Entry<String, Boolean> duel : duelHm.entrySet()) {
+                        if(duel.getValue() == false){
+                            manageDuelListener(duel.getKey());
+                        }
                     }
                 }
+
             }
 
             @Override

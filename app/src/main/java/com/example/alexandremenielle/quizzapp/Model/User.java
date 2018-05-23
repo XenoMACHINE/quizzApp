@@ -1,5 +1,8 @@
 package com.example.alexandremenielle.quizzapp.Model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by alexandremenielle on 01/05/2018.
  */
@@ -9,6 +12,7 @@ public class User {
     private String id;
     private String firstname;
     private String lastname;
+    private String mail;
     private Boolean isOnline;
 
     public User() {
@@ -42,6 +46,7 @@ public class User {
         isOnline = online;
     }
 
+    public String getMail() {return mail;}
 
     public String getId() {
         return id;
@@ -49,5 +54,11 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setMail(String mail) {this.mail = mail;}
+
+    public Map<String,Object> toMap(){
+        return new HashMap<>();
     }
 }
