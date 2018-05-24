@@ -40,11 +40,11 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     private final String TAG = "MainActivity";
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private ArrayList<Theme> allThemes;
-    private ArrayList<User> allUsers;
     private FirebaseAuth mAuth;
     private ItemClickListener itemClickListener;
     private AlertDialog.Builder builder;
     private AlertDialog alert;
+    private AppController controller = new AppController();
 
     private Theme selectedTheme;
 
@@ -66,25 +66,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             return;
         }
 
-        //Set userdefault for emulator which FirebaseAuth dont work
-        String userId = mAuth.getCurrentUser().getUid();
-        if(userId == null){
-            userId = "B0O3cs57qqXdywqkQQR6si98ws03";
-        }
-        mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                user.setId(dataSnapshot.getKey());
-                AppManager.getInstance().currentUser = user;
-                DuelManager.getInstance().waitDuelListener(); //TODO Changer l'endroit de l'appel
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        AppManager.getInstance().setCurrentUser();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -115,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         });
 
 
-        //Get all users and sort by online status
+        //Get all users
         mDatabase.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -127,8 +109,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                         users.add(user);
                     }
                 }
-                allUsers = sortUsersByOnline(users);
-                PlayersAdapter playersAdapter = new PlayersAdapter(allUsers);
+                PlayersAdapter playersAdapter = new PlayersAdapter(users);
                 playersRecyclerView.setAdapter(playersAdapter);
                 playersAdapter.setClickListener(itemClickListener);
             }
@@ -139,25 +120,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             }
         });
 
-    }
-
-    private ArrayList<User> sortUsersByOnline(ArrayList<User> users){
-
-        ArrayList<User> sortedUsers = new ArrayList<>();
-
-        for (User user : users){
-            if (user.getIsOnline()){
-                sortedUsers.add(user);
-            }
-        }
-
-        for (User user : users){
-            if (!user.getIsOnline()){
-                sortedUsers.add(user);
-            }
-        }
-
-        return sortedUsers;
     }
 
     @Override
@@ -198,17 +160,11 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
             case R.id.settings:
                 Intent intentSettings = new Intent(this, SettingsActivity.class);
-                /*EditText editText = (EditText) findViewById(R.id.editText);
-                String message = editText.getText().toString();
-                intent.putExtra(EXTRA_MESSAGE, message);*/
                 startActivity(intentSettings);
                 return true;
 
             case R.id.disconnect:
                 Intent intentConnexion = new Intent(this, ConnexionActivity.class);
-                /*EditText editText = (EditText) findViewById(R.id.editText);
-                String message = editText.getText().toString();
-                intent.putExtra(EXTRA_MESSAGE, message);*/
                 FirebaseAuth.getInstance().signOut();
                 startActivity(intentConnexion);
                 finish();
@@ -245,5 +201,17 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     public void onReceiveEndDuel(Duel duel) {
         alert.cancel();
         Toast.makeText(getApplicationContext(),"Défi annulé.",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onPause() {
+        controller.onActivityPaused(this);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        controller.onActivityResumed(this);
+        super.onResume();
     }
 }

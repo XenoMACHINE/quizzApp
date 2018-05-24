@@ -23,7 +23,7 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
     private ItemClickListener clickListener;
 
     public PlayersAdapter(ArrayList<User> users) {
-        this.users = users;
+        this.users = sortUsersByOnline(users);
     }
 
     @Override
@@ -47,6 +47,25 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
                 if (clickListener != null) clickListener.onClick(view, user);
             }
         });
+    }
+
+    private ArrayList<User> sortUsersByOnline(ArrayList<User> users){
+
+        ArrayList<User> sortedUsers = new ArrayList<>();
+
+        for (User user : users){
+            if (user.getIsOnline()){
+                sortedUsers.add(user);
+            }
+        }
+
+        for (User user : users){
+            if (!user.getIsOnline()){
+                sortedUsers.add(user);
+            }
+        }
+
+        return sortedUsers;
     }
 
     @Override

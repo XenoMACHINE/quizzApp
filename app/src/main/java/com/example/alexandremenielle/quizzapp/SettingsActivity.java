@@ -25,6 +25,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private FirebaseAuth mAuth;
+    private AppController controller = new AppController();
 
     @BindView(R.id.firstname) EditText firstName;
     @BindView(R.id.lastname) EditText lastName;
@@ -89,6 +90,17 @@ public class SettingsActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
 
+    @Override
+    protected void onPause() {
+        controller.onActivityPaused(this);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        controller.onActivityResumed(this);
+        super.onResume();
     }
 }
