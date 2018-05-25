@@ -7,6 +7,7 @@ import android.support.constraint.solver.widgets.Snapshot;
 import android.widget.Toast;
 
 import com.example.alexandremenielle.quizzapp.Model.Duel;
+import com.example.alexandremenielle.quizzapp.Model.Question;
 import com.example.alexandremenielle.quizzapp.Model.Theme;
 import com.example.alexandremenielle.quizzapp.Model.User;
 import com.google.firebase.database.DataSnapshot;
@@ -15,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +44,27 @@ public class DuelManager {
     public Context mContext;
 
     public String currentIdDuel = "";
+
+    private void setQuestionsForTheme(Theme theme){
+
+        final Map<String, Object> questions = new HashMap<>();
+        mDatabase.child("themes").child(theme.getId()).child("questions").limitToFirst(5).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String, Object> questionsIds = (HashMap) dataSnapshot.getValue();
+                mDatabase.child("duels").child(currentIdDuel).child("questions").updateChildren(questionsIds);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        Map<String, Object> pushMap = new HashMap<>();
+        pushMap.put("questions", questions);
+        mDatabase.child("duels").child(currentIdDuel).updateChildren(pushMap);
+    }
 
     public void sendDuelTo(User selectedUser, Theme selectedTheme){
         User currentUser = AppManager.getInstance().currentUser;
@@ -74,6 +97,7 @@ public class DuelManager {
         pushData.put(currentIdDuel, childUpdates);
 
         mDatabase.child("duels").updateChildren(pushData);
+        setQuestionsForTheme(selectedTheme);
 
         Map<String, Object> pushDuelPlayer = new HashMap();
         pushDuelPlayer.put(currentIdDuel, true);

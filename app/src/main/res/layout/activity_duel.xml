@@ -6,11 +6,73 @@
     android:layout_height="match_parent"
     tools:context="com.example.alexandremenielle.quizzapp.DuelActivity">
 
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/topView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FEFEFE">
+
+        <TextView
+            android:id="@+id/questionNumberLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Question 1/5"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginLeft="15dp"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <View
+        android:id="@+id/timeBar"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="#222222"
+        app:layout_constraintTop_toBottomOf="@id/topView"/>
+
     <TextView
         android:id="@+id/questionLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Question : "
-        android:gravity="center"/>
+        android:textStyle="bold"
+        android:text="Quel est la couleur ?"
+        android:gravity="center"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@id/topView"/>
+
+
+    <Button
+        android:id="@+id/answerBtn1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        app:layout_constraintBottom_toTopOf="@id/answerBtn2"/>
+
+    <Button
+        android:id="@+id/answerBtn2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        app:layout_constraintBottom_toTopOf="@id/answerBtn3"/>
+
+    <Button
+        android:id="@+id/answerBtn3"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        app:layout_constraintBottom_toTopOf="@id/answerBtn4"/>
+
+    <Button
+        android:id="@+id/answerBtn4"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

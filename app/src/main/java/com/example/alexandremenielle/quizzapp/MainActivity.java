@@ -217,8 +217,10 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     @Override
     public void onReceiveEndDuel(Duel duel) {
-        alert.cancel();
-        Toast.makeText(getApplicationContext(),"Défi annulé.",Toast.LENGTH_SHORT).show();
+        if (alert != null){
+            alert.cancel();
+            Toast.makeText(getApplicationContext(),"Défi annulé.",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
