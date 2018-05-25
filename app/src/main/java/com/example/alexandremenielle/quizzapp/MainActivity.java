@@ -1,5 +1,6 @@
 package com.example.alexandremenielle.quizzapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     @BindView(R.id.recycleView) RecyclerView recyclerView;
     @BindView(R.id.playerRV) RecyclerView playersRecyclerView;
     @BindView(R.id.playersPopup) ConstraintLayout playersPopup;
+    @BindView(R.id.container) ConstraintLayout container;
 
     private final String TAG = "MainActivity";
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -132,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 .setMessage("En attente de l'adversaire...")
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        container.setBackgroundColor(getResources().getColor(android.R.color.white));
                         DuelManager.getInstance().cancelSentDuel();
                     }
                 })
@@ -139,13 +142,18 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         alert.show();
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onClick(View view, Theme theme) {
         selectedTheme = theme;
         if (playersPopup.getVisibility() == View.VISIBLE){
+            container.setBackgroundColor(getResources().getColor(android.R.color.white));
             playersPopup.setVisibility(View.INVISIBLE);
             return;
         }
+        container.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+
+
         playersPopup.setVisibility(View.VISIBLE);
     }
 
