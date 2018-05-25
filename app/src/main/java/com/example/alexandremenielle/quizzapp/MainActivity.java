@@ -126,10 +126,20 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     @Override
     public void onClick(View view, User user) {
+        builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        if (user.getIsOnline() == false){
+            alert = builder.setTitle("Le joueur est offline")
+                    .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .create();
+            alert.show();
+            return;
+        }
         DuelManager.getInstance().mContext = this;
         DuelManager.getInstance().sendDuelTo(user, selectedTheme);
         playersPopup.setVisibility(View.INVISIBLE);
-        builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         alert = builder.setTitle("Défi envoyé !")
                 .setMessage("En attente de l'adversaire...")
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
