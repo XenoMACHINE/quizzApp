@@ -3,11 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/settings"
+        android:icon="@mipmap/ic_settings_foreground"
         android:title="Parametres"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/disconnect"
-        android:icon="@drawable/common_google_signin_btn_icon_light"
+        android:icon="@mipmap/ic_disconnect_foreground"
         android:title="Deconnexion"
         app:showAsAction="ifRoom" />
 </menu>
