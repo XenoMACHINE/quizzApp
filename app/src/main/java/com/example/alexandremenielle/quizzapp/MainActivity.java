@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.alexandremenielle.quizzapp.Model.Duel;
+import com.example.alexandremenielle.quizzapp.Model.Question;
 import com.example.alexandremenielle.quizzapp.Model.Theme;
 import com.example.alexandremenielle.quizzapp.Model.User;
 import com.google.firebase.auth.FirebaseAuth;

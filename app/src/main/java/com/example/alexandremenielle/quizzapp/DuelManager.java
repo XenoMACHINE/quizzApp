@@ -41,18 +41,70 @@ public class DuelManager {
 
     public DuelEventListener duelEventListener;
 
+    public QuestionsEventListener questionsEventListener;
+
     public Context mContext;
 
     public String currentIdDuel = "";
 
-    private void setQuestionsForTheme(Theme theme){
+    public ArrayList<String> duelQuestionsIds;
 
+    public void getDuelQuestionsIds(){
+        duelQuestionsIds.clear();
+        mDatabase.child("duels").child(currentIdDuel).child("questions").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String, Object> questionsIds = (HashMap) dataSnapshot.getValue();
+                for(String questionId : questionsIds.keySet()){
+                    duelQuestionsIds.add(questionId);
+                }
+                getDuelQuestions();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    public void getDuelQuestions(){
+        final ArrayList<Question> duelQuestions = new ArrayList<>();
+        for (String questionId : duelQuestionsIds){
+            mDatabase.child("questions").child(questionId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Question question = dataSnapshot.getValue(Question.class);
+                    duelQuestions.add(question);
+
+                    if(duelQuestions.size() == 5){ //Fini
+                        questionsEventListener.onReceiveDuelQuestions(duelQuestions);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+
+    private void setQuestionsForTheme(Theme theme){
+        //TODO Changer pour 5 randoms
         final Map<String, Object> questions = new HashMap<>();
         mDatabase.child("themes").child(theme.getId()).child("questions").limitToFirst(5).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String, Object> questionsIds = (HashMap) dataSnapshot.getValue();
                 mDatabase.child("duels").child(currentIdDuel).child("questions").updateChildren(questionsIds);
+                for(String questionId : questionsIds.keySet()){
+                    duelQuestionsIds.add(questionId);
+                }
+                getDuelQuestions();
             }
 
             @Override
