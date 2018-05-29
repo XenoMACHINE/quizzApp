@@ -47,7 +47,9 @@ public class DuelManager {
 
     public String currentIdDuel = "";
 
-    public ArrayList<String> duelQuestionsIds;
+    public ArrayList<String> duelQuestionsIds = new ArrayList<>();
+
+    public ArrayList<Question> duelQuestions = new ArrayList<>();
 
     public void getDuelQuestionsIds(){
         duelQuestionsIds.clear();
@@ -71,7 +73,7 @@ public class DuelManager {
 
 
     public void getDuelQuestions(){
-        final ArrayList<Question> duelQuestions = new ArrayList<>();
+        duelQuestions.clear();
         for (String questionId : duelQuestionsIds){
             mDatabase.child("questions").child(questionId).addValueEventListener(new ValueEventListener() {
                 @Override
@@ -80,7 +82,8 @@ public class DuelManager {
                     duelQuestions.add(question);
 
                     if(duelQuestions.size() == 5){ //Fini
-                        questionsEventListener.onReceiveDuelQuestions(duelQuestions);
+                        if(questionsEventListener != null)
+                            questionsEventListener.onNextQuestion();
                     }
                 }
 
@@ -176,8 +179,13 @@ public class DuelManager {
                 Duel duel = dataSnapshot.getValue(Duel.class);
                 HashMap<String,Object> playerHm = (HashMap<String,Object>) duel.getPlayers().get(selectedUserId);
                 if (playerHm != null && (Boolean) playerHm.get("isReady") == true){
+                    duelEventListener.duelRequestAnswered(null);
                     Intent intent = new Intent(mContext, DuelActivity.class);
                     mContext.startActivity(intent);
+                    ref.removeEventListener(this);
+                }
+                if (duel.getStatus().equals("4")){
+                    duelEventListener.duelRequestAnswered("Duel refusé");
                     ref.removeEventListener(this);
                 }
             }
@@ -191,7 +199,7 @@ public class DuelManager {
 
     public void manageDuelListener(String duelId){
         final DatabaseReference ref = mDatabase.child("duels").child(duelId);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Duel duel = dataSnapshot.getValue(Duel.class);
@@ -204,12 +212,18 @@ public class DuelManager {
 
                 //Gestion des fins de parties
                 if(duel.getStatus().equals("4")){
-                    duelEventListener.onReceiveEndDuel(duel);
+                    if(duelEventListener != null){
+                        duelEventListener.onReceiveEndDuel(duel);
+                    }
                     HashMap<String, Object> pushData = new HashMap<>();
                     pushData.put("closed", true);
                     mDatabase.child("duels").child(currentIdDuel).updateChildren(pushData);
 
-                    //Peut coupé le listener sur ce duel
+                    if(questionsEventListener != null){
+                        questionsEventListener.onDuelFinished("L'adversaire à quitté la partie");
+                    }
+
+                    //on peut maintenant couper le listener sur ce duel
                     ref.removeEventListener(this);
                 }
             }
@@ -290,6 +304,45 @@ public class DuelManager {
         pushData.clear();
         pushData.put("status","4");
         mDatabase.child("duels").child(currentIdDuel).updateChildren(pushData);
+    }
+
+    public void updateDuelAfterAnswer(int score, int questionNumber){
+        Map<String, Object> pushMap = new HashMap<>();
+        pushMap.put("score",score);
+        pushMap.put("questionNumber",questionNumber);
+        mDatabase.child("duels").child(currentIdDuel).child("players").child(AppManager.getInstance().currentUser.getId()).updateChildren(pushMap);
+    }
+
+    public void waitTwoPlayersSameQuestion(){
+        final DatabaseReference ref = mDatabase.child("duels").child(currentIdDuel);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Duel duel = dataSnapshot.getValue(Duel.class);
+                HashMap<String,Object> playerHm = duel.getPlayers();
+                int questionNumber = -1;
+                for(Object object : duel.getPlayers().values()){
+                    HashMap<String,Object> player = (HashMap<String, Object>) object;
+                    if (questionNumber == -1){
+                        questionNumber = ((Long) player.get("questionNumber")).intValue();
+                    }else {
+                        int secondQuestionNumber = ((Long) player.get("questionNumber")).intValue();
+                        if(questionsEventListener != null && questionNumber != 0 && (questionNumber == secondQuestionNumber)){
+                            if(questionNumber == 5){
+                                questionsEventListener.onDuelFinished("Partie terminé !");
+                            }else{
+                                questionsEventListener.onNextQuestion();
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

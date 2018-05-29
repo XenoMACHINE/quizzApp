@@ -14,8 +14,10 @@ public interface DuelEventListener {
 
     void onReceiveDuel(User user);
     void onReceiveEndDuel(Duel duel);
+    void duelRequestAnswered(String answer);
 }
 
 interface QuestionsEventListener {
-    void onReceiveDuelQuestions(ArrayList<Question> questions);
+    void onNextQuestion();
+    void onDuelFinished(String reason);
 }

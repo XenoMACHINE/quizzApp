@@ -163,8 +163,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             return;
         }
         container.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
-
-
         playersPopup.setVisibility(View.VISIBLE);
     }
 
@@ -196,6 +194,9 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     @Override
     public void onReceiveDuel(User user) {
+        if (alert != null) {
+            alert.cancel();
+        }
         final Context context = this;
         builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         alert = builder.setTitle(user.getFullName() + " vous défie !")
@@ -221,6 +222,17 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         if (alert != null){
             alert.cancel();
             Toast.makeText(getApplicationContext(),"Défi annulé.",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void duelRequestAnswered(String answer) {
+        container.setBackgroundColor(getResources().getColor(android.R.color.white));
+        if (alert != null){
+            alert.cancel();
+            if(answer != null) {
+                Toast.makeText(getApplicationContext(), answer, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
