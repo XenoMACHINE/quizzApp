@@ -1,13 +1,18 @@
 package com.example.alexandremenielle.quizzapp;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.UserManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -102,8 +107,9 @@ public class DuelActivity extends AppCompatActivity implements QuestionsEventLis
     }
 
     public void execNextQuestion(){
-        questionNumberLabel.setText("Question " + questionNumber + 1 + "/5");
+        questionNumberLabel.setText("Question " + (questionNumber + 1) + "/5");
         if(questionNumber < DuelManager.getInstance().duelQuestions.size()){
+            launchTimerAnimation();
             enableAllBtns();
             Question question = DuelManager.getInstance().duelQuestions.get(questionNumber);
             questionLabel.setText(question.getText());
@@ -154,5 +160,27 @@ public class DuelActivity extends AppCompatActivity implements QuestionsEventLis
     protected void onDestroy() {
         super.onDestroy();
         DuelManager.getInstance().questionsEventListener = null;
+    }
+
+    public void launchTimerAnimation(){
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        final int width = size.x;
+        ValueAnimator anim = ValueAnimator.ofInt(0, width);
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int val = (Integer) valueAnimator.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = timeBar.getLayoutParams();
+                layoutParams.width = val;
+                timeBar.setLayoutParams(layoutParams);
+                if(val == width){
+                    DuelManager.getInstance().updateDuelAfterAnswer(score,++questionNumber);
+                }
+            }
+        });
+        anim.setDuration(10000);
+        anim.start();
     }
 }

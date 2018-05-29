@@ -57,11 +57,12 @@ public class DuelManager {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String, Object> questionsIds = (HashMap) dataSnapshot.getValue();
-                for(String questionId : questionsIds.keySet()){
-                    duelQuestionsIds.add(questionId);
+                if (questionsIds != null){
+                    for(String questionId : questionsIds.keySet()){
+                        duelQuestionsIds.add(questionId);
+                    }
+                    getDuelQuestions();
                 }
-                getDuelQuestions();
-
             }
 
             @Override
