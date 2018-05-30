@@ -193,23 +193,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add_question:
-                Intent intent = new Intent(this, NewQuestionActivity.class);
-                startActivity(intent);
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     public void onReceiveDuel(User user) {
         if (alert != null) {
