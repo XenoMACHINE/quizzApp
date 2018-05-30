@@ -1,6 +1,7 @@
 package com.example.alexandremenielle.quizzapp;
 
 import android.graphics.Color;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,7 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
     private ItemClickListener clickListener;
 
     public PlayersAdapter(ArrayList<User> users) {
-        this.users = users;
+        this.users = sortUsersByOnline(users);
     }
 
     @Override
@@ -41,12 +42,31 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
         }else{
             holder.playerCellName.setTextColor(Color.RED);
         }
-        holder.playerCellName.setOnClickListener(new View.OnClickListener() {
+        holder.playerCell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (clickListener != null) clickListener.onClick(view, user);
             }
         });
+    }
+
+    private ArrayList<User> sortUsersByOnline(ArrayList<User> users){
+
+        ArrayList<User> sortedUsers = new ArrayList<>();
+
+        for (User user : users){
+            if (user.getIsOnline()){
+                sortedUsers.add(user);
+            }
+        }
+
+        for (User user : users){
+            if (!user.getIsOnline()){
+                sortedUsers.add(user);
+            }
+        }
+
+        return sortedUsers;
     }
 
     @Override
@@ -60,6 +80,7 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.playerCellName) TextView playerCellName;
+        @BindView(R.id.playerCell) ConstraintLayout playerCell;
 
         public ViewHolder(View itemView) {
             super(itemView);
