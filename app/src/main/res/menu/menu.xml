@@ -11,4 +11,8 @@
         android:icon="@mipmap/ic_disconnect_foreground"
         android:title="Deconnexion"
         app:showAsAction="ifRoom" />
+    <item android:id="@+id/action_add_question"
+        android:icon="@drawable/ic_add_question"
+        android:title="Edit"
+        app:showAsAction="always"></item>
 </menu>
