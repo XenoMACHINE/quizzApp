@@ -9,6 +9,7 @@ import android.os.UserManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,11 +36,16 @@ public class DuelActivity extends AppCompatActivity implements QuestionsEventLis
     @BindView(R.id.answerBtn3) Button answerBtn3;
     @BindView(R.id.answerBtn4) Button answerBtn4;
 
+    Boolean hasAnswered = false;
+
+    ValueAnimator anim;
     String currentGoodAnswer;
     int score = 0;
 
     int questionNumber = 0;
     private AlertDialog.Builder builder;
+
+    private final String TAG = "DuelActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +54,11 @@ public class DuelActivity extends AppCompatActivity implements QuestionsEventLis
         ButterKnife.bind(this);
 
         if(DuelManager.getInstance().duelQuestions.size() == 5){
+            Log.i(TAG,"has 5 qestions already");
             execNextQuestion();
-        }
-
-        if(DuelManager.getInstance().duelQuestionsIds.size() == 0){
+        }else{
+            Log.i(TAG,"need questions");
+            disableAllBtns();
             DuelManager.getInstance().getDuelQuestionsIds();
         }
 
@@ -78,30 +85,32 @@ public class DuelActivity extends AppCompatActivity implements QuestionsEventLis
         if (currentGoodAnswer.equals(answerBtn1.getText())){
             score += 10;
         }
-        DuelManager.getInstance().updateDuelAfterAnswer(score,++questionNumber);
-        disableAllBtns();
+        onAnswerClick();
     }
 
     @OnClick(R.id.answerBtn2) public void onAnswerBtn2(){
         if (currentGoodAnswer.equals(answerBtn2.getText())){
             score += 10;
         }
-        DuelManager.getInstance().updateDuelAfterAnswer(score,++questionNumber);
-        disableAllBtns();
+        onAnswerClick();
     }
 
     @OnClick(R.id.answerBtn3) public void onAnswerBtn3(){
         if (currentGoodAnswer.equals(answerBtn3.getText())){
             score += 10;
         }
-        DuelManager.getInstance().updateDuelAfterAnswer(score,++questionNumber);
-        disableAllBtns();
+        onAnswerClick();
     }
 
     @OnClick(R.id.answerBtn4) public void onAnswerBtn4(){
         if (currentGoodAnswer.equals(answerBtn4.getText())){
             score += 10;
         }
+        onAnswerClick();
+    }
+
+    public void onAnswerClick(){
+        hasAnswered = true;
         DuelManager.getInstance().updateDuelAfterAnswer(score,++questionNumber);
         disableAllBtns();
     }
@@ -109,6 +118,7 @@ public class DuelActivity extends AppCompatActivity implements QuestionsEventLis
     public void execNextQuestion(){
         questionNumberLabel.setText("Question " + (questionNumber + 1) + "/5");
         if(questionNumber < DuelManager.getInstance().duelQuestions.size()){
+            hasAnswered = false;
             launchTimerAnimation();
             enableAllBtns();
             Question question = DuelManager.getInstance().duelQuestions.get(questionNumber);
@@ -139,6 +149,7 @@ public class DuelActivity extends AppCompatActivity implements QuestionsEventLis
 
     @Override
     public void onNextQuestion() {
+        Log.i(TAG,"onNextQuestion");
         execNextQuestion();
     }
 
@@ -163,11 +174,13 @@ public class DuelActivity extends AppCompatActivity implements QuestionsEventLis
     }
 
     public void launchTimerAnimation(){
+        if (anim != null)
+            anim.cancel();
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         final int width = size.x;
-        ValueAnimator anim = ValueAnimator.ofInt(0, width);
+        anim = ValueAnimator.ofInt(0, width);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -175,12 +188,18 @@ public class DuelActivity extends AppCompatActivity implements QuestionsEventLis
                 ViewGroup.LayoutParams layoutParams = timeBar.getLayoutParams();
                 layoutParams.width = val;
                 timeBar.setLayoutParams(layoutParams);
-                if(val == width){
+                if(!hasAnswered && val == width){
                     DuelManager.getInstance().updateDuelAfterAnswer(score,++questionNumber);
                 }
             }
         });
         anim.setDuration(10000);
         anim.start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        DuelManager.getInstance().updateDuelStatus("4");
     }
 }

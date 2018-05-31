@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.UserManager;
 import android.support.constraint.solver.widgets.Snapshot;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.alexandremenielle.quizzapp.Model.Duel;
@@ -47,9 +48,13 @@ public class DuelManager {
 
     public String currentIdDuel = "";
 
+    public User ennemie;
+
     public ArrayList<String> duelQuestionsIds = new ArrayList<>();
 
     public ArrayList<Question> duelQuestions = new ArrayList<>();
+
+    private Boolean hasCancel = false;
 
     public void getDuelQuestionsIds(){
         duelQuestionsIds.clear();
@@ -104,11 +109,13 @@ public class DuelManager {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String, Object> questionsIds = (HashMap) dataSnapshot.getValue();
-                mDatabase.child("duels").child(currentIdDuel).child("questions").updateChildren(questionsIds);
-                for(String questionId : questionsIds.keySet()){
-                    duelQuestionsIds.add(questionId);
+                if (questionsIds != null) {
+                    mDatabase.child("duels").child(currentIdDuel).child("questions").updateChildren(questionsIds);
+                    for(String questionId : questionsIds.keySet()){
+                        duelQuestionsIds.add(questionId);
+                    }
+                    getDuelQuestions();
                 }
-                getDuelQuestions();
             }
 
             @Override
@@ -123,6 +130,7 @@ public class DuelManager {
     }
 
     public void sendDuelTo(User selectedUser, Theme selectedTheme){
+        ennemie = selectedUser;
         User currentUser = AppManager.getInstance().currentUser;
 
         Map<String, Object> childUpdates = new HashMap<>();
@@ -164,8 +172,11 @@ public class DuelManager {
         launchDuelListener(selectedUser.getId());
     }
 
-    public void cancelSentDuel(){
+    public void cancelSentDuel(User ennemie){
         HashMap<String, Object> pushData = new HashMap<>();
+        pushData.put(currentIdDuel, true);
+        mDatabase.child("users").child(ennemie.getId()).child("duels").updateChildren(pushData);
+        pushData.clear();
         pushData.put("status", "4");
         pushData.put("closed", true);
         mDatabase.child("duels").child(currentIdDuel).updateChildren(pushData);
@@ -180,6 +191,7 @@ public class DuelManager {
                 Duel duel = dataSnapshot.getValue(Duel.class);
                 HashMap<String,Object> playerHm = (HashMap<String,Object>) duel.getPlayers().get(selectedUserId);
                 if (playerHm != null && (Boolean) playerHm.get("isReady") == true){
+                    manageDuelListener(currentIdDuel);
                     duelEventListener.duelRequestAnswered(null);
                     Intent intent = new Intent(mContext, DuelActivity.class);
                     mContext.startActivity(intent);
@@ -199,6 +211,7 @@ public class DuelManager {
     }
 
     public void manageDuelListener(String duelId){
+        hasCancel = false;
         final DatabaseReference ref = mDatabase.child("duels").child(duelId);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -212,8 +225,9 @@ public class DuelManager {
                 }
 
                 //Gestion des fins de parties
-                if(duel.getStatus().equals("4")){
+                if(duel.getStatus().equals("4") && !hasCancel){
                     if(duelEventListener != null){
+                        //TODO que si les 2 users sont pas ready
                         duelEventListener.onReceiveEndDuel(duel);
                     }
                     HashMap<String, Object> pushData = new HashMap<>();
@@ -269,6 +283,7 @@ public class DuelManager {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         User user = dataSnapshot.getValue(User.class);
+                        ennemie = user;
                         duelEventListener.onReceiveDuel(user);
                     }
 
@@ -288,12 +303,12 @@ public class DuelManager {
         mDatabase.child("users").child(currentUserId).child("duels").updateChildren(pushData);
 
         pushData.clear();
-        pushData.put("isReady",true);
-        mDatabase.child("duels").child(currentIdDuel).child("players").child(currentUserId).updateChildren(pushData);
-
-        pushData.clear();
         pushData.put("status","1");
         mDatabase.child("duels").child(currentIdDuel).updateChildren(pushData);
+
+        pushData.clear();
+        pushData.put("isReady",true);
+        mDatabase.child("duels").child(currentIdDuel).child("players").child(currentUserId).updateChildren(pushData);
     }
 
     public void rejectDuel(){
@@ -314,6 +329,15 @@ public class DuelManager {
         mDatabase.child("duels").child(currentIdDuel).child("players").child(AppManager.getInstance().currentUser.getId()).updateChildren(pushMap);
     }
 
+    public void updateDuelStatus(String status){
+        if (status == "4"){
+            hasCancel = true;
+        }
+        Map<String, Object> pushMap = new HashMap<>();
+        pushMap.put("status",status);
+        mDatabase.child("duels").child(currentIdDuel).updateChildren(pushMap);
+    }
+
     public void waitTwoPlayersSameQuestion(){
         final DatabaseReference ref = mDatabase.child("duels").child(currentIdDuel);
         ref.addValueEventListener(new ValueEventListener() {
@@ -330,7 +354,7 @@ public class DuelManager {
                         int secondQuestionNumber = ((Long) player.get("questionNumber")).intValue();
                         if(questionsEventListener != null && questionNumber != 0 && (questionNumber == secondQuestionNumber)){
                             if(questionNumber == 5){
-                                questionsEventListener.onDuelFinished("Partie terminé !");
+                                calculScore(duel);
                             }else{
                                 questionsEventListener.onNextQuestion();
                             }
@@ -344,6 +368,33 @@ public class DuelManager {
 
             }
         });
+    }
+
+    private void calculScore(Duel duel){
+        int maxScore = 0;
+        int minScore = 0;
+        String winnerId = null;
+        for(Object object : duel.getPlayers().values()) {
+            HashMap<String,Object> player = (HashMap<String, Object>) object;
+            minScore = ((Long) player.get("score")).intValue();;
+
+            if (minScore >= maxScore) {
+                maxScore = minScore;
+                winnerId = (String) player.get("id");
+            }
+        }
+
+        if (minScore == maxScore){
+            questionsEventListener.onDuelFinished("Partie terminée, égalité ! ( " + minScore + " - " + minScore + " )");
+            return;
+        }
+        String winnerName = "";
+        if (winnerId.equals(AppManager.getInstance().currentUser.getId())){
+            winnerName = AppManager.getInstance().currentUser.getFirstname();
+        }else if (ennemie != null){
+            winnerName = ennemie.getFirstname();
+        }
+        questionsEventListener.onDuelFinished(  " Partie terminée, " + winnerName + " à gagné(e) ! ( " + maxScore + " - " + minScore + " )");
     }
 
 }

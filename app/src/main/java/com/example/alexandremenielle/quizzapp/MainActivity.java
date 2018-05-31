@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.alexandremenielle.quizzapp.Model.Duel;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     @BindView(R.id.playerRV) RecyclerView playersRecyclerView;
     @BindView(R.id.playersPopup) ConstraintLayout playersPopup;
     @BindView(R.id.container) ConstraintLayout container;
+    @BindView(R.id.homeLoader) ProgressBar loader;
 
     private final String TAG = "MainActivity";
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -78,10 +80,12 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
         itemClickListener = this;
 
+        loader.setVisibility(View.VISIBLE);
         //Get all themes
         mDatabase.child("themes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                loader.setVisibility(View.INVISIBLE);
                 ArrayList<Theme> themes = new ArrayList<>();
                 for (DataSnapshot themeSnap : dataSnapshot.getChildren()){
                     Theme theme = themeSnap.getValue(Theme.class);
@@ -126,10 +130,10 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     }
 
     @Override
-    public void onClick(View view, User user) {
+    public void onClick(View view, final User user) {
         builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         if (user.getIsOnline() == false){
-            alert = builder.setTitle("Le joueur est offline")
+            alert = builder.setTitle("Le joueur est hors ligne")
                     .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                         }
@@ -146,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         container.setBackgroundColor(getResources().getColor(android.R.color.white));
-                        DuelManager.getInstance().cancelSentDuel();
+                        DuelManager.getInstance().cancelSentDuel(user);
                     }
                 })
                 .create();
@@ -206,11 +210,13 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                         DuelManager.getInstance().acceptDuel();
                         Intent intent = new Intent(context, DuelActivity.class);
                         startActivity(intent);
+                        alert.cancel();
                     }
                 })
                 .setNegativeButton("Refuser", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         DuelManager.getInstance().rejectDuel();
+                        alert.cancel();
                     }
                 })
                 .create();

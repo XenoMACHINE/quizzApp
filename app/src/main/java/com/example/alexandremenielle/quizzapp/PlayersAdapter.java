@@ -38,9 +38,11 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
         final User user = users.get(position);
         holder.playerCellName.setText(user.getFirstname());
         if (user.getIsOnline()) {
-            holder.playerCellName.setTextColor(Color.GREEN);
+            holder.connectedView.setVisibility(View.VISIBLE);
+            //holder.playerCellName.setTextColor(Color.GREEN);
         }else{
-            holder.playerCellName.setTextColor(Color.RED);
+            holder.connectedView.setVisibility(View.INVISIBLE);
+            //holder.playerCellName.setTextColor(Color.RED);
         }
         holder.playerCell.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +83,7 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.playerCellName) TextView playerCellName;
         @BindView(R.id.playerCell) ConstraintLayout playerCell;
+        @BindView(R.id.connectedView) View connectedView;
 
         public ViewHolder(View itemView) {
             super(itemView);

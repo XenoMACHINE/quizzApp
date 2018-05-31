@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,6 +23,7 @@ public class ConnexionActivity extends AppCompatActivity {
 
     @BindView(R.id.login) EditText loginEt;
     @BindView(R.id.password) EditText passwordEt;
+    @BindView(R.id.loader) ProgressBar loader;
 
     private final String TAG = "ConnexionActivity";
     private FirebaseAuth mAuth;
@@ -44,10 +47,12 @@ public class ConnexionActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Il manque un ou plusieurs champs. Veuillez réessayer.",Toast.LENGTH_SHORT).show();
             return;
         }
+        loader.setVisibility(View.VISIBLE);
         mAuth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                loader.setVisibility(View.INVISIBLE);
                 if (task.isSuccessful()) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success");
