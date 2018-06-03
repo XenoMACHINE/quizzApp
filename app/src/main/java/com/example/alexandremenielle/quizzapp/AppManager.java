@@ -44,7 +44,7 @@ public class AppManager {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                System.out.println(databaseError);
             }
         });
     }
