@@ -43,6 +43,7 @@ dependencies {
 
 
     implementation "com.android.support:recyclerview-v7:$project.appCompatVersion"
+    compile project(":duelmanagerlib")
 }
 
 

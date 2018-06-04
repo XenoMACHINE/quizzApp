@@ -1,6 +1,6 @@
-package com.example.alexandremenielle.quizzapp;
+package com.example.duelmanagerlib;
 
-import com.example.alexandremenielle.quizzapp.Model.User;
+import com.example.duelmanagerlib.Model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

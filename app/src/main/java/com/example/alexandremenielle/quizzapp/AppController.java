@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.duelmanagerlib.AppManager;
+
 /**
  * Created by alexandremenielle on 23/05/2018.
  */

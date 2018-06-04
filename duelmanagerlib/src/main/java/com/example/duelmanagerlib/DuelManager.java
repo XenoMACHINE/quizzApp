@@ -1,16 +1,9 @@
-package com.example.alexandremenielle.quizzapp;
+package com.example.duelmanagerlib;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.UserManager;
-import android.support.constraint.solver.widgets.Snapshot;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.example.alexandremenielle.quizzapp.Model.Duel;
-import com.example.alexandremenielle.quizzapp.Model.Question;
-import com.example.alexandremenielle.quizzapp.Model.Theme;
-import com.example.alexandremenielle.quizzapp.Model.User;
+import com.example.duelmanagerlib.Model.Duel;
+import com.example.duelmanagerlib.Model.Question;
+import com.example.duelmanagerlib.Model.Theme;
+import com.example.duelmanagerlib.Model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by alexandremenielle on 13/05/2018.
+ * Created by alexandremenielle on 03/06/2018.
  */
 
 public class DuelManager {
@@ -43,8 +36,6 @@ public class DuelManager {
     public DuelEventListener duelEventListener;
 
     public QuestionsEventListener questionsEventListener;
-
-    public Context mContext;
 
     public String currentIdDuel = "";
 
@@ -192,9 +183,7 @@ public class DuelManager {
                 HashMap<String,Object> playerHm = (HashMap<String,Object>) duel.getPlayers().get(selectedUserId);
                 if (playerHm != null && (Boolean) playerHm.get("isReady") == true){
                     manageDuelListener(currentIdDuel);
-                    duelEventListener.duelRequestAnswered(null);
-                    Intent intent = new Intent(mContext, DuelActivity.class);
-                    mContext.startActivity(intent);
+                    duelEventListener.duelRequestAnswered("accepted");
                     ref.removeEventListener(this);
                 }
                 if (duel.getStatus().equals("4")){

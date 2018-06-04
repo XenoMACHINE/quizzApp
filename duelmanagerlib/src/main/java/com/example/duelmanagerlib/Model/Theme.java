@@ -1,4 +1,4 @@
-package com.example.alexandremenielle.quizzapp.Model;
+package com.example.duelmanagerlib.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -13,16 +13,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.alexandremenielle.quizzapp.Model.Duel;
-import com.example.alexandremenielle.quizzapp.Model.Question;
-import com.example.alexandremenielle.quizzapp.Model.Theme;
-import com.example.alexandremenielle.quizzapp.Model.User;
+import com.example.duelmanagerlib.AppManager;
+import com.example.duelmanagerlib.DuelEventListener;
+import com.example.duelmanagerlib.DuelManager;
+import com.example.duelmanagerlib.Model.Duel;
+import com.example.duelmanagerlib.Model.Theme;
+import com.example.duelmanagerlib.Model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements ItemClickListener, DuelEventListener{
+public class MainActivity extends AppCompatActivity implements ItemClickListener, DuelEventListener {
 
     @BindView(R.id.recycleView) RecyclerView recyclerView;
     @BindView(R.id.playerRV) RecyclerView playersRecyclerView;
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             alert.show();
             return;
         }
-        DuelManager.getInstance().mContext = this;
+
         DuelManager.getInstance().sendDuelTo(user, selectedTheme);
         playersPopup.setVisibility(View.INVISIBLE);
         alert = builder.setTitle("Défi envoyé !")
@@ -234,6 +235,11 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     @Override
     public void duelRequestAnswered(String answer) {
+        if (answer.equals("accepted")){
+            Intent intent = new Intent(this, DuelActivity.class);
+            this.startActivity(intent);
+            return;
+        }
         container.setBackgroundColor(getResources().getColor(android.R.color.white));
         if (alert != null){
             alert.cancel();
