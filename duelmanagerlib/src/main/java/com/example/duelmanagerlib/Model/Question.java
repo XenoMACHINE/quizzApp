@@ -16,6 +16,11 @@ public class Question {
     public Question() {
     }
 
+    public Question(String text, Map<String,Boolean> propositions) {
+        this.text = text;
+        this.propositions = propositions;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
@@ -38,5 +43,25 @@ public class Question {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+
+    class QuestionBuilder{ // Builder
+        private String text;
+        private Map<String,Boolean> propositions;
+
+        QuestionBuilder withText(String text){
+            this.text = text;
+            return this;
+        }
+
+        QuestionBuilder addProposition(String text, Boolean isGood){
+            this.propositions.put(text, isGood);
+            return this;
+        }
+
+        Question build(){
+            return new Question(this.text, this.propositions);
+        }
     }
 }

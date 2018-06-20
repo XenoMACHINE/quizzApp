@@ -21,7 +21,7 @@ public class AppManager {
     public User currentUser;
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
-    public static AppManager getInstance(){
+    public static AppManager getInstance(){ //Singleton
 
         if (sharedInstance == null){
             sharedInstance = new AppManager();
