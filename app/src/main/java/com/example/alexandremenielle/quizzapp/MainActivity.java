@@ -1,9 +1,12 @@
 package com.example.alexandremenielle.quizzapp;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
@@ -43,8 +46,9 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     @BindView(R.id.playersPopup) ConstraintLayout playersPopup;
     @BindView(R.id.container) ConstraintLayout container;
     @BindView(R.id.homeLoader) ProgressBar loader;
-
+    private final static String ADMIN_CHANNEL_ID = "channel";
     private final String TAG = "MainActivity";
+
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private ArrayList<Theme> allThemes;
     private FirebaseAuth mAuth;
@@ -52,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     private AlertDialog.Builder builder;
     private AlertDialog alert;
     private AppController controller = new AppController();
+
+    public static boolean isAppRunning;
 
     private Theme selectedTheme;
 
@@ -128,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 Log.d(TAG, databaseError.toString());
             }
         });
-
     }
 
     @Override
@@ -157,6 +162,38 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 })
                 .create();
         alert.show();
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        String channelId = "admin_channel";
+        String channel2 = "2";
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(channelId,
+                    "Channel 1", NotificationManager.IMPORTANCE_HIGH);
+
+            notificationChannel.setDescription("This is BNT");
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setShowBadge(true);
+            notificationManager.createNotificationChannel(notificationChannel);
+
+            NotificationChannel notificationChannel2 = new NotificationChannel(channel2,
+                    "Channel 2", NotificationManager.IMPORTANCE_MIN);
+
+            notificationChannel.setDescription("This is bTV");
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setShowBadge(true);
+            notificationManager.createNotificationChannel(notificationChannel2);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isAppRunning = false;
     }
 
     @SuppressLint("ResourceAsColor")
