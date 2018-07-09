@@ -1,6 +1,6 @@
 package com.example.duelmanagerlib.Model;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -59,7 +59,7 @@ public class User {
     public void setMail(String mail) {this.mail = mail;}
 
     public Map<String,Object> toMap(){
-        HashMap<String,Object> map = new HashMap<>();
+        LinkedHashMap map = new LinkedHashMap<String, Object>();
         map.put("firstname",firstname);
         map.put("lastname",lastname);
         map.put("mail",mail);
