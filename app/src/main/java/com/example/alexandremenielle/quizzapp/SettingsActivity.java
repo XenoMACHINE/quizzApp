@@ -10,6 +10,8 @@ import android.widget.EditText;
 
 import com.example.duelmanagerlib.AppManager;
 import com.example.duelmanagerlib.Model.User;
+import com.example.duelmanagerlib.Observable.ConcreteObservable;
+import com.example.duelmanagerlib.Observable.Observer;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,7 +24,7 @@ import butterknife.OnClick;
 
 
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity implements Observer {
 
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private FirebaseAuth mAuth;
@@ -33,6 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
     @BindView(R.id.email) EditText email;
     User user = AppManager.getInstance().currentUser;
 
+    public ConcreteObservable observable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,12 @@ public class SettingsActivity extends AppCompatActivity {
 
     @OnClick(R.id.save)
     public void save() {
+        // On crée un objet qui hérite d'Observable
+        //observable = new ConcreteObservable();
+
+        // On "inscrit" une classe implémentant Observer auprès de l'Observable
+        //observable.AddObserver(new TestObserver());
+
         user.setMail(email.getText().toString());
         user.setFirstname(firstName.getText().toString());
         user.setLastname(lastName.getText().toString());
@@ -65,6 +74,8 @@ public class SettingsActivity extends AppCompatActivity {
                 // ...
             }
         });
+        // On déclenche les méthodes Update() au sein des classes inscrites auprès de l'Observable
+        //observable.NotifiyObservers();
         finish();
     }
 
@@ -103,5 +114,9 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onResume() {
         controller.onActivityResumed(this);
         super.onResume();
+    }
+
+    @Override
+    public void Update() {
     }
 }

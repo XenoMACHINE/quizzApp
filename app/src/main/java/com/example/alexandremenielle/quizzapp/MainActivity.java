@@ -27,6 +27,8 @@ import com.example.duelmanagerlib.DuelManager;
 import com.example.duelmanagerlib.Model.Duel;
 import com.example.duelmanagerlib.Model.Theme;
 import com.example.duelmanagerlib.Model.User;
+import com.example.duelmanagerlib.Observable.ConcreteObservable;
+import com.example.duelmanagerlib.Observable.Observer;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,7 +41,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements ItemClickListener, DuelEventListener {
+public class MainActivity extends AppCompatActivity implements ItemClickListener, DuelEventListener,Observer {
 
     @BindView(R.id.recycleView) RecyclerView recyclerView;
     @BindView(R.id.playerRV) RecyclerView playersRecyclerView;
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     public static boolean isAppRunning;
 
     private Theme selectedTheme;
+
+    public ConcreteObservable observable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 })
                 .create();
         alert.show();
+
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -296,5 +301,9 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     protected void onResume() {
         controller.onActivityResumed(this);
         super.onResume();
+    }
+
+    @Override
+    public void Update() {
     }
 }

@@ -1,5 +1,5 @@
 
-package com.example.duelmanagerlib;
+package com.example.duelmanagerlib.Adapter;
 
 import java.util.LinkedHashMap;
 
