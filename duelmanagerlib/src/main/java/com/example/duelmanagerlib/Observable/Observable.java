@@ -2,7 +2,7 @@ package com.example.duelmanagerlib.Observable;
 
 import java.util.List;
 
-public abstract class Observable {
+public class Observable {
     // Cette liste va accueillir les classes, implémentant l'interface Observer, et qui souhaitent être notifiées
     protected List<Observer> observers;
 
