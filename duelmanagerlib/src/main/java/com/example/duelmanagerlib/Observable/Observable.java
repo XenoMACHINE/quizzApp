@@ -1,10 +1,11 @@
 package com.example.duelmanagerlib.Observable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Observable {
     // Cette liste va accueillir les classes, implémentant l'interface Observer, et qui souhaitent être notifiées
-    protected List<Observer> observers;
+    private List<Observer> observers  = new ArrayList<>();
 
     // Cette méthode permet d'ajouter une implémentation d'Observer à la liste à notifier
     public void AddObserver(Observer observer){
