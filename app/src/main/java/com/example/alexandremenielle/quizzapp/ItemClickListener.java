@@ -2,8 +2,9 @@ package com.example.alexandremenielle.quizzapp;
 
 import android.view.View;
 
-import com.example.alexandremenielle.quizzapp.Model.Theme;
-import com.example.alexandremenielle.quizzapp.Model.User;
+import com.example.duelmanagerlib.Model.Theme;
+import com.example.duelmanagerlib.Model.User;
+
 
 /**
  * Created by alexandremenielle on 01/05/2018.

@@ -1,9 +1,12 @@
 package com.example.alexandremenielle.quizzapp;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
@@ -13,16 +16,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.alexandremenielle.quizzapp.Model.Duel;
-import com.example.alexandremenielle.quizzapp.Model.Question;
-import com.example.alexandremenielle.quizzapp.Model.Theme;
-import com.example.alexandremenielle.quizzapp.Model.User;
+import com.example.duelmanagerlib.AppManager;
+import com.example.duelmanagerlib.DuelEventListener;
+import com.example.duelmanagerlib.DuelManager;
+import com.example.duelmanagerlib.Model.Duel;
+import com.example.duelmanagerlib.Model.Theme;
+import com.example.duelmanagerlib.Model.User;
+import com.example.duelmanagerlib.Observable.ConcreteObservable;
+import com.example.duelmanagerlib.Observable.Observer;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,15 +41,16 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements ItemClickListener, DuelEventListener{
+public class MainActivity extends AppCompatActivity implements ItemClickListener, DuelEventListener,Observer {
 
     @BindView(R.id.recycleView) RecyclerView recyclerView;
     @BindView(R.id.playerRV) RecyclerView playersRecyclerView;
     @BindView(R.id.playersPopup) ConstraintLayout playersPopup;
     @BindView(R.id.container) ConstraintLayout container;
     @BindView(R.id.homeLoader) ProgressBar loader;
-
+    private final static String ADMIN_CHANNEL_ID = "channel";
     private final String TAG = "MainActivity";
+
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private ArrayList<Theme> allThemes;
     private FirebaseAuth mAuth;
@@ -52,7 +59,11 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     private AlertDialog alert;
     private AppController controller = new AppController();
 
+    public static boolean isAppRunning;
+
     private Theme selectedTheme;
+
+    public ConcreteObservable observable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 Log.d(TAG, databaseError.toString());
             }
         });
-
     }
 
     @Override
@@ -143,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             alert.show();
             return;
         }
-        DuelManager.getInstance().mContext = this;
+
         DuelManager.getInstance().sendDuelTo(user, selectedTheme);
         playersPopup.setVisibility(View.INVISIBLE);
         alert = builder.setTitle("Défi envoyé !")
@@ -156,6 +166,39 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 })
                 .create();
         alert.show();
+
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        String channelId = "admin_channel";
+        String channel2 = "2";
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(channelId,
+                    "Channel 1", NotificationManager.IMPORTANCE_HIGH);
+
+            notificationChannel.setDescription("This is BNT");
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setShowBadge(true);
+            notificationManager.createNotificationChannel(notificationChannel);
+
+            NotificationChannel notificationChannel2 = new NotificationChannel(channel2,
+                    "Channel 2", NotificationManager.IMPORTANCE_MIN);
+
+            notificationChannel.setDescription("This is bTV");
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setShowBadge(true);
+            notificationManager.createNotificationChannel(notificationChannel2);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isAppRunning = false;
     }
 
     @SuppressLint("ResourceAsColor")
@@ -234,6 +277,11 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     @Override
     public void duelRequestAnswered(String answer) {
+        if (answer.equals("accepted")){
+            Intent intent = new Intent(this, DuelActivity.class);
+            this.startActivity(intent);
+            return;
+        }
         container.setBackgroundColor(getResources().getColor(android.R.color.white));
         if (alert != null){
             alert.cancel();
@@ -253,5 +301,9 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     protected void onResume() {
         controller.onActivityResumed(this);
         super.onResume();
+    }
+
+    @Override
+    public void Update() {
     }
 }

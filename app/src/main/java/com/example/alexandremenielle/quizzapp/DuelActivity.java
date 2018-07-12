@@ -17,8 +17,10 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.alexandremenielle.quizzapp.Model.Duel;
-import com.example.alexandremenielle.quizzapp.Model.Question;
+
+import com.example.duelmanagerlib.DuelManager;
+import com.example.duelmanagerlib.Model.Question;
+import com.example.duelmanagerlib.QuestionsEventListener;
 
 import java.util.ArrayList;
 

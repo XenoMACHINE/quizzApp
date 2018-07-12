@@ -1,6 +1,6 @@
-package com.example.alexandremenielle.quizzapp;
+package com.example.duelmanagerlib;
 
-import com.example.alexandremenielle.quizzapp.Model.User;
+import com.example.duelmanagerlib.Model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,7 +21,7 @@ public class AppManager {
     public User currentUser;
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
-    public static AppManager getInstance(){
+    public static AppManager getInstance(){ //Singleton
 
         if (sharedInstance == null){
             sharedInstance = new AppManager();
@@ -44,7 +44,7 @@ public class AppManager {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                System.out.println(databaseError);
             }
         });
     }
