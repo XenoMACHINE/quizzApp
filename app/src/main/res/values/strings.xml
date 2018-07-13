@@ -3,4 +3,15 @@
     <string name="notification_add_to_cart_button">Go</string>
     <string name="notifications_admin_channel_name">Channel name</string>
     <string name="notifications_admin_channel_description">Channel description</string>
+
+    <string-array name="planets_array">
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
 </resources>

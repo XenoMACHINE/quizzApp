@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +41,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class MainActivity extends AppCompatActivity implements ItemClickListener, DuelEventListener,Observer {
 
@@ -114,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 Log.d(TAG, databaseError.toString());
             }
         });
-
 
         //Get all users
         mDatabase.child("users").addValueEventListener(new ValueEventListener() {
@@ -234,6 +236,11 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 startActivity(intentConnexion);
                 finish();
                 return true;
+
+            case R.id.action_add_question:
+                Intent intentNewQuestion = new Intent(this, NewQuestionActivity.class);
+                startActivity(intentNewQuestion);
+                finish();
 
         }
         return super.onOptionsItemSelected(item);
