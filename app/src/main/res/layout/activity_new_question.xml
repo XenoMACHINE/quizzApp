@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:text="Choisissez votre thème"
+        android:textStyle="bold"
         android:textAlignment="center"
         app:layout_constraintTop_toTopOf="parent"
         />
@@ -24,6 +25,7 @@
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="10dp"
+        android:textAlignment="center"
         android:spinnerMode="dropdown"
         android:background="@android:drawable/btn_dropdown"
         app:layout_constraintTop_toBottomOf="@id/chooseTheme"
@@ -34,6 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Écrivez vos trois propositions"
+        android:textStyle="bold"
         android:textAlignment="center"
         app:layout_constraintTop_toTopOf="@id/guidelineFalseAnswers"
         />
@@ -85,6 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Écrivez la bonne réponse"
+        android:textStyle="bold"
         android:textAlignment="center"
         app:layout_constraintTop_toTopOf="@id/guidelineGoodAnswer"
         />

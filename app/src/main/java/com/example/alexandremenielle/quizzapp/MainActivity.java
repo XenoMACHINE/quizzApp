@@ -240,8 +240,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             case R.id.action_add_question:
                 Intent intentNewQuestion = new Intent(this, NewQuestionActivity.class);
                 startActivity(intentNewQuestion);
-                finish();
-
+                return true;
         }
         return super.onOptionsItemSelected(item);
 
