@@ -1,6 +1,10 @@
 package com.example.duelmanagerlib.Model;
 
-import java.util.ArrayList;
+import android.util.Pair;
+
+import com.example.duelmanagerlib.Iterator.QuestionIterator;
+import com.example.duelmanagerlib.Iterator.QuestionRepository;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +33,24 @@ public class Question {
                 '}';
     }
 
+    public Map<String,Object> toMap(){
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("text",text);
+
+        QuestionRepository questionRepository = new QuestionRepository(propositions);
+
+        HashMap<String,Object> propositionMap = new HashMap<>();
+
+        for(QuestionIterator iter = questionRepository.getIterator(); iter.hasNext();){
+            Pair<String, Boolean> values = iter.next();
+            propositionMap.put(values.first,values.second);
+        }
+
+        map.put("propositions", propositionMap);
+
+        return map;
+    }
+
     public String getText() {
         return text;
     }
@@ -44,7 +66,6 @@ public class Question {
     public void setText(String text) {
         this.text = text;
     }
-
 
     class QuestionBuilder{ // Builder
         private String text;
