@@ -38,6 +38,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -146,14 +147,18 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     public void onClick(View view, final User user) {
         builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         if (user.getIsOnline() == false){
-            alert = builder.setTitle("Le joueur est hors ligne")
+            HashMap<String,Object> map = new HashMap<>();
+            map.put("FCMToken",user.getFCMToken());
+            map.put("username",AppManager.getInstance().currentUser.getFirstname());
+            mDatabase.child("notifications").push().updateChildren(map);
+            /*alert = builder.setTitle("Le joueur est hors ligne")
                     .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     })
                     .create();
             alert.show();
-            return;
+            return;*/
         }
 
         DuelManager.getInstance().sendDuelTo(user, selectedTheme);

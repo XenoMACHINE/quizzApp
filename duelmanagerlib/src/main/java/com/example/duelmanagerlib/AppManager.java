@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
 
@@ -32,6 +33,7 @@ public class AppManager {
 
     public void setCurrentUser(){
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        pushFCMToken(userId);
         mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -47,6 +49,13 @@ public class AppManager {
                 System.out.println(databaseError);
             }
         });
+    }
+
+    public void pushFCMToken(String id){
+        String token = FirebaseInstanceId.getInstance().getToken();
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("FCMToken",token);
+        mDatabase.child("users").child(id).updateChildren(map);
     }
 
     public void setUserConnected(Boolean connected){
