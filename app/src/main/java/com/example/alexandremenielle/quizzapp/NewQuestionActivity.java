@@ -50,7 +50,7 @@ public class NewQuestionActivity extends AppCompatActivity {
                     allThemesString.add(theme.getName());
                 }
                 allThemes = themes;
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(NewQuestionActivity.this, android.R.layout.simple_spinner_item, allThemesString);
+                ArrayAdapter<Theme> adapter = new ArrayAdapter<>(NewQuestionActivity.this, android.R.layout.simple_spinner_item, allThemes);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinnerThemes.setAdapter(adapter);
             }
