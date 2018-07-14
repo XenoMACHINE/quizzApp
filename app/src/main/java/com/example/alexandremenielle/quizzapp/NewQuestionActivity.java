@@ -42,13 +42,11 @@ public class NewQuestionActivity extends AppCompatActivity implements AdapterVie
     @BindView(R.id.secondAnswer) EditText secondAnswer;
     @BindView(R.id.thirdAnswer) EditText thirdAnswer;
     @BindView(R.id.goodAnswer) EditText goodAnswer;
-    @BindView(R.id.buttonSubmitQuestion) Button btnSubmit;
     private final String TAG = "NewQuestionActivity";
 
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     ArrayList<Theme> allThemes = new ArrayList<>();
     ArrayList<String> allThemesString = new ArrayList<>();
-    private FirebaseAuth mAuth;
     private Theme themeSelected;
 
     @Override

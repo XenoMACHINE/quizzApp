@@ -2,19 +2,21 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_add_question"
-        android:icon="@drawable/ic_add_question"
-        android:title="Edit"
-        app:showAsAction="always"/>
-    <item
-        android:id="@+id/settings"
-        android:icon="@mipmap/ic_settings_foreground"
-        android:title="Parametres"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/disconnect"
         android:icon="@mipmap/ic_disconnect_foreground"
         android:title="Deconnexion"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_add_theme"
+        android:title="Nouveau thème"
+        app:showAsAction="collapseActionView"/>
+    <item
+        android:id="@+id/action_add_question"
+        android:title="Nouvelle Question"
+        app:showAsAction="collapseActionView"/>
+    <item
+        android:id="@+id/settings"
+        android:title="Parametres"
+        app:showAsAction="collapseActionView" />
 
 </menu>

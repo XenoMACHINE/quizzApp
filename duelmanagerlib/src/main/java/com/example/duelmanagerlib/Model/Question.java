@@ -5,6 +5,7 @@ import android.util.Pair;
 import com.example.duelmanagerlib.Factory.QuestionFactory;
 import com.example.duelmanagerlib.Iterator.QuestionIterator;
 import com.example.duelmanagerlib.Iterator.QuestionRepository;
+import com.example.duelmanagerlib.TemplateMethod.FirebaseObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,12 +14,13 @@ import java.util.Map;
  * Created by alexandremenielle on 14/07/2018.
  */
 
-public abstract class Question {
+public abstract class Question extends FirebaseObject {
 
     public abstract Map<String, Boolean> getPropositions();
 
     public abstract String getText();
 
+    @Override
     public Map<String,Object> toMap(){
         HashMap<String,Object> map = new HashMap<>();
         map.put("text",getText());
