@@ -14,6 +14,7 @@ public class User {
     private String lastname;
     private String mail;
     private Boolean isOnline;
+    private String FCMToken;
 
     public User() {
     }
@@ -57,6 +58,10 @@ public class User {
     }
 
     public void setMail(String mail) {this.mail = mail;}
+
+    public String getFCMToken() {
+        return FCMToken;
+    }
 
     public Map<String,Object> toMap(){
         LinkedHashMap map = new LinkedHashMap<String, Object>();
