@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewThemeActivity">
+
+    <TextView
+        android:id="@+id/chooseNewTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Écrivez le nom du thème que vous souhaitez ajouter"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/guidelineNewTheme"
+        />
+
+    <EditText
+        android:id="@+id/newTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nouveau thème.."
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="30dp"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/chooseNewTheme"
+        />
+
+    <Button
+        android:id="@+id/buttonSubmitTheme"
+        android:text="Enregistrer le thème"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/newTheme"
+        />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineNewTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05"
+        />
+
+</android.support.constraint.ConstraintLayout>

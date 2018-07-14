@@ -1,5 +1,7 @@
 package com.example.duelmanagerlib.Model;
 
+import com.example.duelmanagerlib.TemplateMethod.FirebaseObject;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -7,7 +9,7 @@ import java.util.Map;
  * Created by alexandremenielle on 01/05/2018.
  */
 
-public class User {
+public class User extends FirebaseObject {
 
     private String id;
     private String firstname;
@@ -63,7 +65,9 @@ public class User {
         return FCMToken;
     }
 
-    public Map<String,Object> toMap(){
+
+    @Override
+    public Map<String, Object> toMap() {
         LinkedHashMap map = new LinkedHashMap<String, Object>();
         map.put("firstname",firstname);
         map.put("lastname",lastname);

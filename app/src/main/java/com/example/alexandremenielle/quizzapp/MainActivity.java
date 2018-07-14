@@ -30,6 +30,7 @@ import com.example.duelmanagerlib.Model.Theme;
 import com.example.duelmanagerlib.Model.User;
 import com.example.duelmanagerlib.Observable.ConcreteObservable;
 import com.example.duelmanagerlib.Observable.Observer;
+import com.example.duelmanagerlib.TemplateMethod.FirebaseObject;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,13 +40,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
-public class MainActivity extends AppCompatActivity implements ItemClickListener, DuelEventListener,Observer {
+public class MainActivity extends AppCompatActivity implements ItemClickListener, DuelEventListener, Observer {
 
     @BindView(R.id.recycleView) RecyclerView recyclerView;
     @BindView(R.id.playerRV) RecyclerView playersRecyclerView;
@@ -246,6 +248,11 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 Intent intentNewQuestion = new Intent(this, NewQuestionActivity.class);
                 startActivity(intentNewQuestion);
                 return true;
+
+            case R.id.action_add_theme:
+                Intent intentNewTheme = new Intent(this, NewThemeActivity.class);
+                startActivity(intentNewTheme);
+                return true;
         }
         return super.onOptionsItemSelected(item);
 
@@ -316,4 +323,5 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     @Override
     public void Update() {
     }
+
 }

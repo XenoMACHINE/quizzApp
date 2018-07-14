@@ -1,13 +1,17 @@
 package com.example.duelmanagerlib.Model;
 
+import com.example.duelmanagerlib.TemplateMethod.FirebaseObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Created by alexandremenielle on 11/04/2018.
  */
 
-public class Theme {
+public class Theme extends FirebaseObject {
 
     private String id;
     private String name;
@@ -33,4 +37,11 @@ public class Theme {
                 '}';
     }
 
+    @Override
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id",id);
+        map.put("name",name);
+        return map;
+    }
 }
