@@ -1,67 +1,77 @@
 package com.example.duelmanagerlib.Model;
 
-import java.util.ArrayList;
+import android.util.Pair;
+
+import com.example.duelmanagerlib.Factory.QuestionFactory;
+import com.example.duelmanagerlib.Iterator.QuestionIterator;
+import com.example.duelmanagerlib.Iterator.QuestionRepository;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by alexandremenielle on 12/04/2018.
+ * Created by alexandremenielle on 14/07/2018.
  */
 
-public class Question {
+public abstract class Question {
 
-    private String text;
-    private Map<String,Boolean> propositions;
+    public abstract Map<String, Boolean> getPropositions();
 
-    public Question() {
-    }
+    public abstract String getText();
 
-    public Question(String text, Map<String,Boolean> propositions) {
-        this.text = text;
-        this.propositions = propositions;
+    public Map<String,Object> toMap(){
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("text",getText());
+
+        QuestionRepository questionRepository = new QuestionRepository(getPropositions());
+
+        HashMap<String,Object> propositionMap = new HashMap<>();
+
+        for(QuestionIterator iter = questionRepository.getIterator(); iter.hasNext();){
+            Pair<String, Boolean> values = iter.next();
+            propositionMap.put(values.first,values.second);
+        }
+
+        map.put("propositions", propositionMap);
+
+        return map;
     }
 
     @Override
     public String toString() {
         return "Question{" +
-                "text='" + text + '\'' +
-                ", propositions=" + propositions +
+                "text='" + getText() + '\'' +
+                ", propositions=" + getPropositions() +
                 '}';
     }
+}
 
-    public String getText() {
-        return text;
+class QuestionBuilder{ // Builder
+    private QuestionFactory.Type type = QuestionFactory.Type.SINGLEANSWER;
+    private String text = "";
+    private HashMap<String,Boolean> propositions = new HashMap<>();
+
+    // /!\ Type need to be set before addPropostitions /!\
+    QuestionBuilder withType(QuestionFactory.Type type){
+        this.type = type;
+        return this;
     }
 
-    public Map<String, Boolean> getPropositions() {
-        return propositions;
-    }
-
-    public void setPropositions(Map<String, Boolean> propositions) {
-        this.propositions = propositions;
-    }
-
-    public void setText(String text) {
+    QuestionBuilder withText(String text){
         this.text = text;
+        return this;
     }
 
-
-    class QuestionBuilder{ // Builder
-        private String text;
-        private Map<String,Boolean> propositions;
-
-        QuestionBuilder withText(String text){
-            this.text = text;
-            return this;
-        }
-
-        QuestionBuilder addProposition(String text, Boolean isGood){
+    QuestionBuilder addProposition(String text, Boolean isGood){
+        if (type == QuestionFactory.Type.SINGLEANSWER && this.propositions.containsValue(true)){
+            this.propositions.put(text, false);
+        }else{
             this.propositions.put(text, isGood);
-            return this;
         }
+        return this;
+    }
 
-        Question build(){
-            return new Question(this.text, this.propositions);
-        }
+    Question build(){
+        return new QuestionFactory().getQuestion(type, text, propositions);
     }
 }
