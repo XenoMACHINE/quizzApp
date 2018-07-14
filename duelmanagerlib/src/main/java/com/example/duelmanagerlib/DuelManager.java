@@ -355,13 +355,16 @@ public class DuelManager {
     private void calculScore(Duel duel){
         int maxScore = 0;
         int minScore = 0;
+        int tmp = 0;
         String winnerId = null;
         for(Object object : duel.getPlayers().values()) {
             HashMap<String,Object> player = (HashMap<String, Object>) object;
-            minScore = ((Long) player.get("score")).intValue();;
+            minScore = ((Long) player.get("score")).intValue();
 
             if (minScore >= maxScore) {
+                tmp = maxScore;
                 maxScore = minScore;
+                minScore = tmp;
                 winnerId = (String) player.get("id");
             }
         }
