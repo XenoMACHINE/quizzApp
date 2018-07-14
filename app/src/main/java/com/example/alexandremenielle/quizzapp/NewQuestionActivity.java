@@ -52,7 +52,7 @@ public class NewQuestionActivity extends AppCompatActivity implements AdapterVie
 
         ButterKnife.bind(this);
 
-        //spinnerThemes.setOnItemClickListener(this);
+        spinnerThemes.setOnItemSelectedListener(this);
 
         //Get all themes
         mDatabase.child("themes").addValueEventListener(new ValueEventListener() {
@@ -86,6 +86,7 @@ public class NewQuestionActivity extends AppCompatActivity implements AdapterVie
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         this.themeSelected = (Theme) adapterView.getItemAtPosition(i);
+        System.out.println(themeSelected);
     }
 
     @Override
