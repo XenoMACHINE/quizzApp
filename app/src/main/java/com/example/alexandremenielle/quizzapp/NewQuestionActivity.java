@@ -14,6 +14,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.duelmanagerlib.Builder.QuestionBuilder;
+import com.example.duelmanagerlib.Factory.QuestionFactory;
+import com.example.duelmanagerlib.Model.Question;
 import com.example.duelmanagerlib.Model.Theme;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +26,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,12 +87,26 @@ public class NewQuestionActivity extends AppCompatActivity implements AdapterVie
     @OnClick(R.id.buttonSubmitQuestion)
     public void submitQuestion() {
         System.out.println("Submit");
+        Question newQuestion = new QuestionBuilder()
+                .withType(QuestionFactory.Type.SINGLEANSWER)
+                .withText(questionName.getText().toString())
+                .addProposition(firstAnswer.getText().toString(), false)
+                .addProposition(secondAnswer.getText().toString(), false)
+                .addProposition(thirdAnswer.getText().toString(), false)
+                .addProposition(goodAnswer.getText().toString(), true)
+                .build();
+        String id = mDatabase.push().getKey();
+        String idTheme = themeSelected.getId().toString();
+        HashMap<String, Object> newThemeQuestion = new HashMap<>();
+        newThemeQuestion.put(id, true);
+        mDatabase.child("questions").child(id).updateChildren(newQuestion.toMap());
+        mDatabase.child("themes").child(idTheme).child("questions").updateChildren(newThemeQuestion);
+        finish();
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         this.themeSelected = (Theme) adapterView.getItemAtPosition(i);
-        System.out.println(themeSelected);
     }
 
     @Override
