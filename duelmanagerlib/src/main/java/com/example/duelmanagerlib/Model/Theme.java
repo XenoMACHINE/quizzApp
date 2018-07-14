@@ -25,7 +25,6 @@ public class Theme {
     }
 
     @Override
-
     public String toString() {
         return "Theme{" +
                 "id='" + id + '\'' +

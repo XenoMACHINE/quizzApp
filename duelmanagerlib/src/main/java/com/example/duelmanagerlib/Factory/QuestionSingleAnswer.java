@@ -17,8 +17,6 @@ public class QuestionSingleAnswer extends Question {
     private String text;
     private Map<String,Boolean> propositions;
 
-    public QuestionSingleAnswer() {}
-
     public QuestionSingleAnswer(String text, Map<String, Boolean> propositions) {
         this.text = text;
         this.propositions = propositions;
