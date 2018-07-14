@@ -8,13 +8,140 @@
     tools:context=".NewQuestionActivity">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:id="@+id/chooseTheme"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:layout_marginTop="36dp"
+        android:text="Choisissez votre thème"
+        android:textStyle="bold"
+        android:textAlignment="center"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <Spinner
+        android:id="@+id/spinnerThemes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="10dp"
+        android:textAlignment="center"
+        android:spinnerMode="dropdown"
+        android:background="@android:drawable/btn_dropdown"
+        app:layout_constraintTop_toBottomOf="@id/chooseTheme"
+        />
+
+    <TextView
+        android:id="@+id/chooseFalseAnswers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Écrivez vos trois propositions"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintTop_toTopOf="@id/guidelineFalseAnswers"
+        />
+
+    <EditText
+        android:id="@+id/firstAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="First Answer"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="30dp"
+        android:textAlignment="center"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/chooseFalseAnswers"
         />
+
+    <EditText
+        android:id="@+id/secondAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Second Answer"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="60dp"
+        android:textAlignment="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/firstAnswer"
+        />
+
+    <EditText
+        android:id="@+id/thirdAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Third Answer"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="60dp"
+        android:textAlignment="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/secondAnswer"
+        />
+
+    <TextView
+        android:id="@+id/chooseGoodAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Écrivez la bonne réponse"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintTop_toTopOf="@id/guidelineGoodAnswer"
+        />
+
+    <EditText
+        android:id="@+id/goodAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Good Answer"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="30dp"
+        android:textAlignment="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/chooseGoodAnswer"
+        />
+
+    <Button
+        android:id="@+id/buttonSubmitQuestion"
+        android:text="Submit question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/guidelineButtonSubmitQuestion"
+        />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineFalseAnswers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25"
+        />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineGoodAnswer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.64"
+        />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineButtonSubmitQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.86"
+        />
+
+
 </android.support.constraint.ConstraintLayout>

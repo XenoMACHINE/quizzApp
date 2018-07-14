@@ -36,6 +36,8 @@ dependencies {
 
     //Firebase database
     implementation "com.google.firebase:firebase-database:$project.firebaseVersion"
+    //Firebase Messaging
+    implementation "com.google.firebase:firebase-messaging:$project.firebaseVersion"
 
     //Butterknife http://jakewharton.github.io/butterknife/
     implementation "com.jakewharton:butterknife:$project.butterKnifeVersion"
@@ -43,7 +45,7 @@ dependencies {
 
 
     implementation "com.android.support:recyclerview-v7:$project.appCompatVersion"
-    compile project(":duelmanagerlib")
+    implementation project(":duelmanagerlib")
 }
 
 
