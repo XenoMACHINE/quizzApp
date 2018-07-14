@@ -11,6 +11,7 @@ import android.widget.EditText;
 import com.example.duelmanagerlib.AppManager;
 import com.example.duelmanagerlib.Model.User;
 import com.example.duelmanagerlib.Observable.ConcreteObservable;
+import com.example.duelmanagerlib.Observable.Observable;
 import com.example.duelmanagerlib.Observable.Observer;
 import com.example.duelmanagerlib.Observable.TestObserver;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -51,8 +52,10 @@ public class SettingsActivity extends AppCompatActivity implements Observer {
 
     @OnClick(R.id.save)
     public void save() {
-
-        TestObserver.test();
+        // On crée un objet qui hérite d'Observable
+        final Observable observable = new Observable();
+        // On "inscrit" une classe implémentant Observer auprès de l'Observable
+        observable.AddObserver(new TestObserver());
 
         user.setMail(email.getText().toString());
         user.setFirstname(firstName.getText().toString());
@@ -63,6 +66,9 @@ public class SettingsActivity extends AppCompatActivity implements Observer {
             public void onSuccess(Void aVoid) {
                 // Write was successful!
                 // ...
+                // On déclenche les méthodes Update() au sein des classes inscrites auprès de l'Observable
+                observable.NotifiyObservers();
+
             }
         })
         .addOnFailureListener(new OnFailureListener() {
