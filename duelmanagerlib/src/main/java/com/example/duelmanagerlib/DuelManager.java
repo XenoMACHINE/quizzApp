@@ -1,5 +1,8 @@
 package com.example.duelmanagerlib;
 
+import com.example.duelmanagerlib.Delegation.ReadyPlayer;
+import com.example.duelmanagerlib.Delegation.UnReadyPlayer;
+import com.example.duelmanagerlib.Factory.QuestionSingleAnswer;
 import com.example.duelmanagerlib.Model.Duel;
 import com.example.duelmanagerlib.Model.Question;
 import com.example.duelmanagerlib.Model.Theme;
@@ -75,7 +78,7 @@ public class DuelManager {
             mDatabase.child("questions").child(questionId).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Question question = dataSnapshot.getValue(Question.class);
+                    Question question = dataSnapshot.getValue(QuestionSingleAnswer.class);
                     duelQuestions.add(question);
 
                     if(duelQuestions.size() == 5){ //Fini
@@ -94,7 +97,6 @@ public class DuelManager {
 
 
     private void setQuestionsForTheme(Theme theme){
-        //TODO Changer pour 5 randoms
         final Map<String, Object> questions = new HashMap<>();
         mDatabase.child("themes").child(theme.getId()).child("questions").limitToFirst(5).addValueEventListener(new ValueEventListener() {
             @Override
@@ -127,17 +129,8 @@ public class DuelManager {
         Map<String, Object> childUpdates = new HashMap<>();
         Map<String, Object> players = new HashMap<>();
 
-        Map<String, Object> currentUserHm = new HashMap<>();
-        currentUserHm.put("isReady", true);
-        currentUserHm.put("score", 0);
-        currentUserHm.put("id", currentUser.getId());
-        currentUserHm.put("questionNumber", 0);
-
-        Map<String, Object> selectedUserHm = new HashMap<>();
-        selectedUserHm.put("isReady", false);
-        selectedUserHm.put("score", 0);
-        selectedUserHm.put("id", selectedUser.getId());
-        selectedUserHm.put("questionNumber", 0);
+        Map<String, Object> currentUserHm =  new ReadyPlayer().makePlayer(currentUser.getId());
+        Map<String, Object> selectedUserHm = new UnReadyPlayer().makePlayer(currentUser.getId());
 
         players.put(currentUser.getId(), currentUserHm);
         players.put(selectedUser.getId(),selectedUserHm);

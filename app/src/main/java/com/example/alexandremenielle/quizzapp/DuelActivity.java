@@ -1,11 +1,8 @@
 package com.example.alexandremenielle.quizzapp;
 
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Point;
-import android.os.UserManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +10,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -23,6 +19,8 @@ import com.example.duelmanagerlib.Model.Question;
 import com.example.duelmanagerlib.QuestionsEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -125,8 +123,12 @@ public class DuelActivity extends AppCompatActivity implements QuestionsEventLis
             enableAllBtns();
             Question question = DuelManager.getInstance().duelQuestions.get(questionNumber);
             questionLabel.setText(question.getText());
+
             int index = 0;
-            for (String answer : question.getPropositions().keySet()){
+
+            List<String> answers = new ArrayList(question.getPropositions().keySet());
+            Collections.shuffle(answers);
+            for (String answer : answers) {
                 if (question.getPropositions().get(answer) == true){
                     currentGoodAnswer = answer;
                 }
