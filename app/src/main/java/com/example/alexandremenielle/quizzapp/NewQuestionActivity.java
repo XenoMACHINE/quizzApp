@@ -5,9 +5,14 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.duelmanagerlib.Model.Theme;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,16 +26,24 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class NewQuestionActivity extends AppCompatActivity {
+public class NewQuestionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     @BindView(R.id.spinnerThemes) Spinner spinnerThemes;
+    @BindView(R.id.questionName) EditText questionName;
+    @BindView(R.id.firstAnswer) EditText firstAnswer;
+    @BindView(R.id.secondAnswer) EditText secondAnswer;
+    @BindView(R.id.thirdAnswer) EditText thirdAnswer;
+    @BindView(R.id.goodAnswer) EditText goodAnswer;
+    @BindView(R.id.buttonSubmitQuestion) Button btnSubmit;
     private final String TAG = "NewQuestionActivity";
 
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     ArrayList<Theme> allThemes = new ArrayList<>();
     ArrayList<String> allThemesString = new ArrayList<>();
     private FirebaseAuth mAuth;
+    private Theme themeSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +51,8 @@ public class NewQuestionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_question);
 
         ButterKnife.bind(this);
+
+        //spinnerThemes.setOnItemClickListener(this);
 
         //Get all themes
         mDatabase.child("themes").addValueEventListener(new ValueEventListener() {
@@ -60,6 +75,21 @@ public class NewQuestionActivity extends AppCompatActivity {
                 Log.d(TAG, databaseError.toString());
             }
         });
+
+    }
+
+    @OnClick(R.id.buttonSubmitQuestion)
+    public void submitQuestion() {
+        System.out.println("Submit");
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        this.themeSelected = (Theme) adapterView.getItemAtPosition(i);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
 }
