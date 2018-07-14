@@ -291,12 +291,11 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         if (answer.equals("accepted")){
             Intent intent = new Intent(this, DuelActivity.class);
             this.startActivity(intent);
-            return;
         }
         container.setBackgroundColor(getResources().getColor(android.R.color.white));
         if (alert != null){
             alert.cancel();
-            if(answer != null) {
+            if(answer != null && answer != "accepted") {
                 Toast.makeText(getApplicationContext(), answer, Toast.LENGTH_SHORT).show();
             }
         }

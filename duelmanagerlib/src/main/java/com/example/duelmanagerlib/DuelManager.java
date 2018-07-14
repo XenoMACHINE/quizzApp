@@ -130,7 +130,7 @@ public class DuelManager {
         Map<String, Object> players = new HashMap<>();
 
         Map<String, Object> currentUserHm =  new ReadyPlayer().makePlayer(currentUser.getId());
-        Map<String, Object> selectedUserHm = new UnReadyPlayer().makePlayer(currentUser.getId());
+        Map<String, Object> selectedUserHm = new UnReadyPlayer().makePlayer(selectedUser.getId());
 
         players.put(currentUser.getId(), currentUserHm);
         players.put(selectedUser.getId(),selectedUserHm);
