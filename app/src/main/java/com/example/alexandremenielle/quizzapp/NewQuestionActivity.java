@@ -47,7 +47,8 @@ public class NewQuestionActivity extends AppCompatActivity implements AdapterVie
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     ArrayList<Theme> allThemes = new ArrayList<>();
     ArrayList<String> allThemesString = new ArrayList<>();
-    private Theme themeSelected;
+    String themeIdSelected;
+    Theme themeSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,7 @@ public class NewQuestionActivity extends AppCompatActivity implements AdapterVie
                     allThemesString.add(theme.getName());
                 }
                 allThemes = themes;
-                ArrayAdapter<Theme> adapter = new ArrayAdapter<>(NewQuestionActivity.this, android.R.layout.simple_spinner_item, allThemes);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(NewQuestionActivity.this, android.R.layout.simple_spinner_item, allThemesString);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinnerThemes.setAdapter(adapter);
             }
@@ -102,9 +103,18 @@ public class NewQuestionActivity extends AppCompatActivity implements AdapterVie
         finish();
     }
 
+    public void findTheme(String themeId) {
+        for (Theme themeToFind : allThemes) {
+            if (themeToFind.getName() == themeId) {
+                this.themeSelected = themeToFind;
+            }
+        }
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        this.themeSelected = (Theme) adapterView.getItemAtPosition(i);
+        this.themeIdSelected = adapterView.getItemAtPosition(i).toString();
+        findTheme(themeIdSelected);
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.duelmanagerlib.Builder.QuestionBuilder;
+import com.example.duelmanagerlib.Builder.ThemeBuilder;
 import com.example.duelmanagerlib.Factory.QuestionFactory;
 import com.example.duelmanagerlib.Model.Question;
 import com.example.duelmanagerlib.Model.Theme;
@@ -29,7 +30,6 @@ public class NewThemeActivity extends AppCompatActivity {
     @BindView(R.id.newTheme) EditText newTheme;
 
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-    String newThemeName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +42,15 @@ public class NewThemeActivity extends AppCompatActivity {
     @OnClick(R.id.buttonSubmitTheme)
     public void submitTheme() {
         System.out.println("Submit");
-        newThemeName = newTheme.getText().toString();
         String id = mDatabase.push().getKey();
-        //mDatabase.child("themes").child(id).updateChildren(newThemeName.toMap());
+        Theme theme = new Theme();
+        theme.setId(id);
+        theme.setName(newTheme.getText().toString());
+        /*Theme theme = new ThemeBuilder()
+                .id(id)
+                .name(newTheme.getText().toString())
+                .build();*/
+        mDatabase.child("themes").child(id).updateChildren(theme.toMap());
         finish();
     }
 }

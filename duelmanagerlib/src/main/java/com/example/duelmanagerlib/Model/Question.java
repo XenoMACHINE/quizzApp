@@ -14,13 +14,12 @@ import java.util.Map;
  * Created by alexandremenielle on 14/07/2018.
  */
 
-public abstract class Question extends FirebaseObject {
+public abstract class Question {
 
     public abstract Map<String, Boolean> getPropositions();
 
     public abstract String getText();
 
-    @Override
     public Map<String,Object> toMap(){
         HashMap<String,Object> map = new HashMap<>();
         map.put("text",getText());
