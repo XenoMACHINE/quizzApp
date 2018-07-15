@@ -22,6 +22,10 @@ public class QuestionSingleAnswer extends Question {
         this.propositions = propositions;
     }
 
+    public QuestionSingleAnswer(){
+
+    }
+
     @Override
     public Map<String, Boolean> getPropositions() {
         return propositions;
