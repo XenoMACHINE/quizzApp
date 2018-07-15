@@ -43,13 +43,10 @@ public class NewThemeActivity extends AppCompatActivity {
     public void submitTheme() {
         System.out.println("Submit");
         String id = mDatabase.push().getKey();
-        Theme theme = new Theme();
-        theme.setId(id);
-        theme.setName(newTheme.getText().toString());
-        /*Theme theme = new ThemeBuilder()
+        Theme theme = new ThemeBuilder()
                 .id(id)
                 .name(newTheme.getText().toString())
-                .build();*/
+                .build();
         mDatabase.child("themes").child(id).updateChildren(theme.toMap());
         finish();
     }

@@ -18,7 +18,7 @@ public class ThemeBuilder {
     }
 
     public Theme build() {
-        return new Theme();
+        return new Theme(id, name);
     }
 
 }

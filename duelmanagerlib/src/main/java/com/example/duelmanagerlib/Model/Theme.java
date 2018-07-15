@@ -20,6 +20,11 @@ public class Theme extends FirebaseObject {
     public Theme() {
     }
 
+    public Theme(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public String getId() {
         return id;
     }
