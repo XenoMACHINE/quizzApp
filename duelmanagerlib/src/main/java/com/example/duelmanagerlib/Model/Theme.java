@@ -37,7 +37,6 @@ public class Theme extends FirebaseObject {
     }
 
     @Override
-
     public String toString() {
         return "Theme{" +
                 "id='" + id + '\'' +

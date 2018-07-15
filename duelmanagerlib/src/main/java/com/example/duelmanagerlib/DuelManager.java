@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,6 +75,7 @@ public class DuelManager {
 
     public void getDuelQuestions(){
         duelQuestions.clear();
+        Collections.shuffle(duelQuestionsIds);
         for (String questionId : duelQuestionsIds){
             mDatabase.child("questions").child(questionId).addValueEventListener(new ValueEventListener() {
                 @Override
