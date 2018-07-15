@@ -27,9 +27,8 @@ import com.example.duelmanagerlib.DuelManager;
 import com.example.duelmanagerlib.Model.Duel;
 import com.example.duelmanagerlib.Model.Theme;
 import com.example.duelmanagerlib.Model.User;
-import com.example.duelmanagerlib.Observable.ConcreteObservable;
-import com.example.duelmanagerlib.Observable.Observable;
 import com.example.duelmanagerlib.Observable.Observer;
+import com.example.duelmanagerlib.Observable.ObserverClass;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -65,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     private Theme selectedTheme;
 
-    public ConcreteObservable observable;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,10 +75,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
         mAuth = FirebaseAuth.getInstance();
 
-        // On crée un objet qui hérite d'Observable
-        final Observable observable = new Observable();
-        // On "inscrit" une classe implémentant Observer auprès de l'Observable
-        observable.AddObserver(new MainActivity());
+        ObserverClass.AddObserver(this);
 
         if(mAuth.getCurrentUser() == null){
             Intent intent = new Intent(this, ConnexionActivity.class);
