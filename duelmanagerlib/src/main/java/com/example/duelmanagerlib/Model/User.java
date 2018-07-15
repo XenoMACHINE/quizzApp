@@ -1,8 +1,8 @@
 package com.example.duelmanagerlib.Model;
 
+import com.example.duelmanagerlib.Adapter.LinkedHashMapAdapter;
 import com.example.duelmanagerlib.TemplateMethod.FirebaseObject;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -68,7 +68,7 @@ public class User extends FirebaseObject {
 
     @Override
     public Map<String, Object> toMap() {
-        LinkedHashMap map = new LinkedHashMap<String, Object>();
+        LinkedHashMapAdapter map = new LinkedHashMapAdapter<String, Object>();
         map.put("firstname",firstname);
         map.put("lastname",lastname);
         map.put("mail",mail);
