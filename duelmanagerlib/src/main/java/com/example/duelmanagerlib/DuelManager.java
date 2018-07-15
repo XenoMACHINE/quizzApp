@@ -7,6 +7,8 @@ import com.example.duelmanagerlib.Model.Duel;
 import com.example.duelmanagerlib.Model.Question;
 import com.example.duelmanagerlib.Model.Theme;
 import com.example.duelmanagerlib.Model.User;
+import com.example.duelmanagerlib.Observable.Observable;
+import com.example.duelmanagerlib.Observable.Observer;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,7 +24,7 @@ import java.util.Map;
  * Created by alexandremenielle on 03/06/2018.
  */
 
-public class DuelManager {
+public class DuelManager implements Observer {
 
     private static DuelManager sharedInstance;
 
@@ -169,6 +171,10 @@ public class DuelManager {
     }
 
     public void launchDuelListener(final String selectedUserId){
+        // On crée un objet qui hérite d'Observable
+        final Observable observable = new Observable();
+        // On "inscrit" une classe implémentant Observer auprès de l'Observable
+        //observable.AddObserver(new DuelManager());
 
         final DatabaseReference ref = mDatabase.child("duels").child(currentIdDuel);
         ref.addValueEventListener(new ValueEventListener() {
@@ -178,11 +184,15 @@ public class DuelManager {
                 HashMap<String,Object> playerHm = (HashMap<String,Object>) duel.getPlayers().get(selectedUserId);
                 if (playerHm != null && (Boolean) playerHm.get("isReady") == true){
                     manageDuelListener(currentIdDuel);
-                    duelEventListener.duelRequestAnswered("accepted");
+                    //duelEventListener.duelRequestAnswered("accepted");
+                    // On déclenche les méthodes Update() au sein des classes inscrites auprès de l'Observable
+                    observable.NotifiyObservers("accepted");
                     ref.removeEventListener(this);
                 }
                 if (duel.getStatus().equals("4")){
-                    duelEventListener.duelRequestAnswered("Duel refusé");
+                    //duelEventListener.duelRequestAnswered("Duel refusé");
+                    // On déclenche les méthodes Update() au sein des classes inscrites auprès de l'Observable
+                    observable.NotifiyObservers("Duel refusé");
                     ref.removeEventListener(this);
                 }
             }
@@ -384,4 +394,8 @@ public class DuelManager {
         questionsEventListener.onDuelFinished(  " Partie terminée, " + winnerName + " à gagné(e) ! ( " + maxScore + " - " + minScore + " )");
     }
 
+    @Override
+    public void duelRequestAnswered(String answer) {
+
+    }
 }

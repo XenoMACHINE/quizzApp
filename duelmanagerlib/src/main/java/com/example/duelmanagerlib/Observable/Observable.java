@@ -18,9 +18,9 @@ public class Observable {
     }
 
     // Cette méthode permet de notifier toutes les implémentations d'Observer inscrites, au travers de leur méthode Update()
-    public void NotifiyObservers(){
+    public void NotifiyObservers(String answer){
         for (Observer obs:observers) {
-            obs.Update();
+            obs.duelRequestAnswered(answer);
         }
     }
 }

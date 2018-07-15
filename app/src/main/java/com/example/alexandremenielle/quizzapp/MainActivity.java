@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -29,8 +28,8 @@ import com.example.duelmanagerlib.Model.Duel;
 import com.example.duelmanagerlib.Model.Theme;
 import com.example.duelmanagerlib.Model.User;
 import com.example.duelmanagerlib.Observable.ConcreteObservable;
+import com.example.duelmanagerlib.Observable.Observable;
 import com.example.duelmanagerlib.Observable.Observer;
-import com.example.duelmanagerlib.TemplateMethod.FirebaseObject;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,14 +39,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-
-public class MainActivity extends AppCompatActivity implements ItemClickListener, DuelEventListener, Observer {
+public class MainActivity extends AppCompatActivity implements ItemClickListener, DuelEventListener,Observer {
 
     @BindView(R.id.recycleView) RecyclerView recyclerView;
     @BindView(R.id.playerRV) RecyclerView playersRecyclerView;
@@ -81,6 +77,11 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         DuelManager.getInstance().duelEventListener = this;
 
         mAuth = FirebaseAuth.getInstance();
+
+        // On crée un objet qui hérite d'Observable
+        final Observable observable = new Observable();
+        // On "inscrit" une classe implémentant Observer auprès de l'Observable
+        observable.AddObserver(new MainActivity());
 
         if(mAuth.getCurrentUser() == null){
             Intent intent = new Intent(this, ConnexionActivity.class);
@@ -318,10 +319,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     protected void onResume() {
         controller.onActivityResumed(this);
         super.onResume();
-    }
-
-    @Override
-    public void Update() {
     }
 
 }
