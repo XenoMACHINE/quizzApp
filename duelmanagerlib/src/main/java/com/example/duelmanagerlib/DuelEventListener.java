@@ -10,5 +10,5 @@ import com.example.duelmanagerlib.Model.User;
 public interface DuelEventListener {
     void onReceiveDuel(User user);
     void onReceiveEndDuel(Duel duel);
-    void duelRequestAnswered(String answer);
+    //void duelRequestAnswered(String answer);
 }
