@@ -7,154 +7,156 @@
     android:layout_height="match_parent"
     tools:context=".NewQuestionActivity">
 
-    <TextView
-        android:id="@+id/chooseTheme"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Choisissez votre thème"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        android:layout_height="match_parent">
 
-    <Spinner
-        android:id="@+id/spinnerThemes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="10dp"
-        android:textAlignment="center"
-        android:spinnerMode="dropdown"
-        android:background="@android:drawable/btn_dropdown"
-        app:layout_constraintTop_toBottomOf="@id/chooseTheme"
-        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/questionName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Écrivez votre question.."
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerThemes"
-        />
+            <TextView
+                android:id="@+id/chooseTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Choisissez votre thème"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/chooseFalseAnswers"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Écrivez vos trois propositions"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        app:layout_constraintTop_toTopOf="@id/guidelineFalseAnswers"
-        />
+            <Spinner
+                android:id="@+id/spinnerThemes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"
+                android:textAlignment="center"
+                app:layout_constraintTop_toBottomOf="@id/chooseTheme" />
 
-    <EditText
-        android:id="@+id/firstAnswer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Première proposition"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="30dp"
-        android:textAlignment="center"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/chooseFalseAnswers"
-        />
+            <EditText
+                android:id="@+id/questionName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="20dp"
+                android:hint="Écrivez votre question.."
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spinnerThemes" />
 
-    <EditText
-        android:id="@+id/secondAnswer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Seconde proposition"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="60dp"
-        android:textAlignment="center"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/firstAnswer"
-        />
+            <android.support.constraint.Guideline
 
-    <EditText
-        android:id="@+id/thirdAnswer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Troisième proposition"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="60dp"
-        android:textAlignment="center"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/secondAnswer"
-        />
+                android:id="@+id/guidelineFalseAnswers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.32" />
 
-    <TextView
-        android:id="@+id/chooseGoodAnswer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Écrivez la bonne réponse"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        app:layout_constraintTop_toTopOf="@id/guidelineGoodAnswer"
-        />
+            <TextView
+                android:id="@+id/chooseFalseAnswers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Écrivez vos trois propositions"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toTopOf="@id/guidelineFalseAnswers" />
 
-    <EditText
-        android:id="@+id/goodAnswer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Bonne réponse"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="30dp"
-        android:textAlignment="center"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/chooseGoodAnswer"
-        />
+            <EditText
+                android:id="@+id/firstAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="20dp"
+                android:hint="Première proposition"
+                android:textAlignment="center"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/chooseFalseAnswers" />
 
-    <Button
-        android:id="@+id/buttonSubmitQuestion"
-        android:text="Enregistrer la question"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/guidelineButtonSubmitQuestion"
-        />
+            <EditText
+                android:id="@+id/secondAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="20dp"
+                android:hint="Seconde proposition"
+                android:textAlignment="center"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/firstAnswer" />
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guidelineFalseAnswers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.32"
-        />
+            <EditText
+                android:id="@+id/thirdAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="20dp"
+                android:hint="Troisième proposition"
+                android:textAlignment="center"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/secondAnswer" />
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guidelineGoodAnswer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.70"
-        />
+            <android.support.constraint.Guideline
+                android:id="@+id/guidelineGoodAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.70" />
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guidelineButtonSubmitQuestion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.86"
-        />
+            <TextView
+                android:id="@+id/chooseGoodAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Écrivez la bonne réponse"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="@id/guidelineGoodAnswer" />
+
+            <EditText
+                android:id="@+id/goodAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="20dp"
+                android:hint="Bonne réponse"
+                android:textAlignment="center"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/chooseGoodAnswer" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guidelineButtonSubmitQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.86" />
+
+            <Button
+                android:id="@+id/buttonSubmitQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="60dp"
+                android:background="@color/colorPrimary"
+                android:text="Enregistrer la question"
+                android:textColor="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/guidelineButtonSubmitQuestion" />
+        </LinearLayout>
+    </ScrollView>
 
 
 </android.support.constraint.ConstraintLayout>
