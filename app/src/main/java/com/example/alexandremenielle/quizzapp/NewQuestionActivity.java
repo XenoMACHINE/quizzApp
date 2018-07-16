@@ -85,14 +85,22 @@ public class NewQuestionActivity extends AppCompatActivity implements AdapterVie
 
     @OnClick(R.id.buttonSubmitQuestion)
     public void submitQuestion() {
-        System.out.println("Submit");
+        String questionNameText = questionName.getText().toString();
+        String firstAnswerText = firstAnswer.getText().toString();
+        String secondAnswerText = secondAnswer.getText().toString();
+        String thirdAnswerText = thirdAnswer.getText().toString();
+        String goodAnswerText = goodAnswer.getText().toString();
+        if (questionNameText.isEmpty() || firstAnswerText.isEmpty() || secondAnswerText.isEmpty() || thirdAnswerText.isEmpty() || goodAnswerText.isEmpty()) {
+            Toast.makeText(getApplicationContext(),"Il manque un ou plusieurs champs. Veuillez réessayer.",Toast.LENGTH_SHORT).show();
+            return;
+        }
         Question newQuestion = new QuestionBuilder()
                 .withType(QuestionFactory.Type.SINGLEANSWER)
-                .withText(questionName.getText().toString())
-                .addProposition(firstAnswer.getText().toString(), false)
-                .addProposition(secondAnswer.getText().toString(), false)
-                .addProposition(thirdAnswer.getText().toString(), false)
-                .addProposition(goodAnswer.getText().toString(), true)
+                .withText(questionNameText)
+                .addProposition(firstAnswerText, false)
+                .addProposition(secondAnswerText, false)
+                .addProposition(thirdAnswerText, false)
+                .addProposition(goodAnswerText, true)
                 .build();
         String id = mDatabase.push().getKey();
         String idTheme = themeSelected.getId().toString();

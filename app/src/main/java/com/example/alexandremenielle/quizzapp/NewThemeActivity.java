@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.duelmanagerlib.Builder.QuestionBuilder;
 import com.example.duelmanagerlib.Builder.ThemeBuilder;
@@ -41,11 +42,15 @@ public class NewThemeActivity extends AppCompatActivity {
 
     @OnClick(R.id.buttonSubmitTheme)
     public void submitTheme() {
-        System.out.println("Submit");
+        String newThemeText = newTheme.getText().toString();
+        if (newThemeText.isEmpty()) {
+            Toast.makeText(getApplicationContext(),"Vous n'avez pas saisi de thème. Veuillez réessayer.",Toast.LENGTH_SHORT).show();
+            return;
+        }
         String id = mDatabase.push().getKey();
         Theme theme = new ThemeBuilder()
                 .id(id)
-                .name(newTheme.getText().toString())
+                .name(newThemeText)
                 .build();
         mDatabase.child("themes").child(id).updateChildren(theme.toMap());
         finish();
