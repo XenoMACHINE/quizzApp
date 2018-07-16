@@ -6,4 +6,5 @@
     <color name="red">#FF3050</color>
     <color name="lightGray">#AAAAAA</color>
     <color name="white">#ffffff</color>
+    <color name="overlay">#88000000</color>
 </resources>
