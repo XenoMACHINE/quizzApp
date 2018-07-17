@@ -66,9 +66,6 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder>{
             case "Systemes Reseaux et Cloud Computing":
                 holder.frame.setBackgroundResource(R.drawable.cc);
                 break;
-            case "pizza":
-                holder.frame.setBackgroundResource(R.drawable.pizza);
-                break;
             default:
                 holder.frame.setBackgroundResource(R.drawable.placeholder);
                 break;

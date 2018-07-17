@@ -142,7 +142,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.86" />
+                app:layout_constraintGuide_percent="0.84" />
 
             <Button
                 android:id="@+id/buttonSubmitQuestion"
